@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Dashboard</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/adminsidenavbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+      <!-- DataTable HEADER-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+    <style>
+
+        /* Your existing styles here */
+
+        /* Optional: Customize styles if needed */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        a {
+            text-decoration: none;
+            color: #fff;
+
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        table {
+            width: 75%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ff00c8;
+            color: #fff;
+            font-size: 2vh;
+        }
+
+        td {
+            font-size: 2vh;
+        }
+
+
+        button {
+            width: 5rem;
+            height: 2.2rem;
+            border-radius: 2rem;
+            color: white;
+            border: none
+        }
+
+        .word-wrap {
+            max-width: 150px;
+            /* You can adjust this value based on your requirement */
+            word-wrap: break-word;
+        }
+        .error-message {
+        color: red;
+        font-size: 12px;
+    }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidenavbar">
+        <%- include('sidenavbar') %>
+
+         
+      <div class="content">
+        <!-- Your existing content here -->
+       <h2>Sales Report</h2>
+      
+       <div style="margin-bottom: 1rem;">
+        <form action="/admin/salesreportfilter" method="post" onsubmit="return validateDates()">
+          <label for="start_date">Start Date:</label>
+          <input type="date" id="start_date" name="start_date" required>
+          <span id="start_date_error" class="error-message"></span>
+          <label for="end_date">End Date:</label>
+          <input type="date" id="end_date" name="end_date" required>
+         
+          <span id="start_date_error" class="error-message"></span>
+          <button type="submit" style="background-color: #007bff; color: white;border-radius:12px;margin-left: 2px;border: 1px solid black;">Submit</button>
+
+       
+      </form>
+
+       <%if(orders && orders.length>0){%>
+            <table id="example" class="table table-striped" style="width:100%">
+
+          <thead>
+            <tr>
+                <th style="background-color: aqua;color:blue;">No</th>
+               <th style="background-color: aqua;color:blue;">User Name</th>
+               <th style="background-color: aqua;color:blue;">Total Price</th>
+               <th style="background-color: aqua;color:blue;">Payment Method</th>
+               <th style="background-color: aqua;color:blue;">Date</th>
+              
+            </tr>
+          </thead>
+
+          <tbody id="userTableBody">
+          
+            <% orders.forEach(function(order,index) { %>
+                <tr>
+                    <td><%=index+1%></td>
+                    <td><%= order.username %></td>
+                    <td><%= order.totalPrice %></td>
+                    <td><%= order.paymentmode %></td>
+                    <td><%- formatDate(order.orderdate)%></td>
+                    
+                </tr>
+            <% }); %>
+            
+              </tbody>
+
+
+
+
+        </table>
+      </div>
+      <%}else{ %>
+            
+        <p style="color: #3498db; font-size: 30px; font-weight: bold; text-align: center; width: 100%;margin-left: .5rem;margin-top: 2rem;">No item in sales</p>
+
+
+    <%}%>
+    </div>
+    <% function formatDate(inputDate) { %>
+        <% const date=new Date(inputDate); %>
+          <% const day=String(date.getDate()).padStart(2, '0' ); %>
+            <% const month=String(date.getMonth() + 1).padStart(2, '0' ); %>
+              <% const year=String(date.getFullYear()).slice(-2); %>
+                <%= `${day}-${month}-${year}` %>
+                  <% } %>
+    <!-- table -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+    <script>
+      new DataTable('#example');
+
+    </script>
+    <script>
+        function showConfirmation() {
+            Swal.fire({
+                title: 'Logout Confirmation',
+                text: 'Are you sure you want to log out?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Logout',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    title: 'swal-title',
+                    text: 'swal-text',
+                    confirmButton: 'swal-button--confirm',
+                    cancelButton: 'swal-button--cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    performLogout();
+                }
+            });
+        }
+
+        function performLogout() {
+            // Add your logout logic here
+            // For example, redirect to the logout URL
+            window.location.href = "/admin/logout";
+        }
+    </script>
+    <script>
+        function validateDates() {
+            var startDateInput = document.getElementById("start_date");
+            var endDateInput = document.getElementById("end_date");
+            var startDate = new Date(startDateInput.value);
+            var endDate = new Date(endDateInput.value);
+            var currentDate = new Date();
+        
+            // Check if start date is greater than current date
+            if (startDate > currentDate) {
+                startDateInput.nextElementSibling.textContent = "cannot be in the future.";
+                return false;
+            } else {
+                startDateInput.nextElementSibling.textContent = "";
+            }
+        
+            // Check if end date is less than current date
+            if (endDate < startDate) {
+                endDateInput.nextElementSibling.textContent = "cannot be in less than startDate.";
+                return false;
+            } else {
+                endDateInput.nextElementSibling.textContent = "";
+            }
+        
+            // Check if start date is greater than end date
+            if (startDate > endDate) {
+                startDateInput.nextElementSibling.textContent = "Start date cannot be after end date.";
+                endDateInput.nextElementSibling.textContent = "End date cannot be before start date.";
+                return false;
+            } else {
+                startDateInput.nextElementSibling.textContent = "";
+                endDateInput.nextElementSibling.textContent = "";
+            }
+        
+            return true;
+        }
+        </script>  
+    
+    <!-- Add Bootstrap JS and Popper.js scripts at the end of the body -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

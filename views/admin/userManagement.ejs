@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Dashboard</title>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/adminsidenavbar.css">
+  <!-- DataTable HEADER-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+
+
+  <style>
+    /* Your existing styles here */
+
+    /* Optional: Customize styles if needed */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    a {
+      text-decoration: none;
+      color: #fff;
+
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #007bff;
+      color: #fff;
+    }
+
+    @media screen and (max-width: 600px) {
+      .dashboard {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidenavbar">
+    <%- include('sidenavbar') %>
+
+      <div class="content">
+        <!-- Your existing content here -->
+        <h2>User List</h2>
+      <!--TABLE HEADER-->
+      <table id="example" class="table table-striped" style="width:100%">
+
+          <thead>
+            <tr>
+              <th style="background-color: aqua;color:blue;">Id</th>
+                 <th style="background-color: aqua;color:blue;">Username</th>
+                 <th style="background-color: aqua;color:blue;">Email</th>
+                 <th style="background-color: aqua;color:blue;">Isblocked</th>
+                 <th style="background-color: aqua;color:blue;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Add your table rows with data here -->
+            <% if(data && data.length> 0) { %>
+              <% data.forEach((user, index)=> { %>
+                <tr>
+                  <td>
+                    <%= index + 1 %>
+                  </td>
+                  <td>
+                    <%= user.username %>
+                  </td>
+                  <td>
+                    <%= user.email %>
+                  </td>
+                  <td>
+                    <%= user.isblocked %>
+                  </td>
+                  <!-- block/unblock user -->
+                  <td>
+                    <a href="/admin/blockuser/<%= user._id %>">
+                      <button class="btn btn-<%= user.isblocked ? 'success' : 'danger' %> ">
+                        <%= user.isblocked ? 'Unblock' : 'Block' %>
+                      </button>
+                    </a>
+                  </td>
+                </tr>
+                <% }); %>
+                  <% } %>
+          </tbody>
+
+
+
+        </table>
+      </div>
+  </div>
+  </div>
+  </div>
+ <!-- DATATABLE  SCRIPT-->
+ <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+ <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+ <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ 
+ <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+ <script>
+    new DataTable('#example');
+</script>
+ <script>
+  function showConfirmation() {
+    Swal.fire({
+      title: 'Logout Confirmation',
+      text: 'Are you sure you want to log out?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Logout',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        title: 'swal-title',
+        text: 'swal-text',
+        confirmButton: 'swal-button--confirm',
+        cancelButton: 'swal-button--cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        performLogout();
+      }
+    });
+  }
+
+  function performLogout() {
+    // Add your logout logic here
+    // For example, redirect to the logout URL
+    window.location.href = "/admin/logout";
+  }
+</script>
+  <!-- Add Bootstrap JS and Popper.js scripts at the end of the body -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

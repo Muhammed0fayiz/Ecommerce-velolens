@@ -1,0 +1,20 @@
+#nav-item {
+  
+    color: black;
+    margin-left: 3vh;
+  }
+  a.nav-link {
+    color: black;
+    margin-left: 3vh;
+  }
+  .navbar{
+       background-color: rgb(215, 223, 230);
+  }
+
+  .company-name {
+  font-family: 'Your Chosen Font', sans-serif; /* Replace 'Your Chosen Font' with the actual font you want to use */
+  font-size: 20px; /* Adjust the font size according to your design */
+  font-weight: bold;
+  color:blue; /* Adjust the color according to your design */
+}
+

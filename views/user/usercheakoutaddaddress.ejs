@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Your+Chosen+Font&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/headstyle.css">
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+
+  <style>
+    #nav-item {
+      color: black;
+      margin-left: 3vh;
+    }
+
+    a.nav-link {
+      color: black;
+      margin-left: 3vh;
+    }
+
+    .navbar {
+      background-color: rgb(215, 223, 230);
+    }
+
+    .logo-image {
+      margin-top: 1px;
+      width: 3rem;
+      height: 3rem;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .company-name {
+      font-family: 'Your Chosen Font', sans-serif;
+      /* Replace 'Your Chosen Font' with the actual font you want to use */
+      font-size: 20px;
+      /* Adjust the font size according to your design */
+      font-weight: bold;
+      color: blue;
+      /* Adjust the color according to your design */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- navbar -->
+  <%- include('navbarprofile') %>
+    <div class="container">
+      <h4>Address</h4>
+      <div class="row">
+
+        <form class="col s12" method="post" action="/cart/addaddresspost" onsubmit="return validateForm()">
+
+          <div class="row">
+
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m12 l6">
+              <input id="firstname" type="text" placeholder="first_name" name="firstname">
+              <span id="firstnameError" class="text-danger"></span>
+            </div>
+
+            <div class="input-field col s12 m12 l6">
+              <input id="lastname" type="text" placeholder="last_name" name="secondname">
+              <span id="lastnameError" class="text-danger"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12 m12 l6">
+              <input id="housename" type="text" placeholder="housename" name="housename">
+              <span id="housenameError" class="text-danger"></span>
+            </div>
+            <div class="input-field col s12 m12 l6">
+              <input id="town" type="text" placeholder="City/Town" name="city">
+              <span id="townError" class="text-danger"></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col s12 m12 l6">
+              <label for="state">State</label>
+              <select id="state" class="browser-default" name="state">
+                <option>Kerala</option>
+                <option>Tamilnadu</option>
+                <option>Karnadaka</option>
+              </select>
+              <span id="stateError" class="text-danger"></span>
+            </div>
+            <div class="input-field col s12 m12 l6">
+              <input id="pincode" type="text" placeholder="Pin Code" name="pincode">
+              <span id="pincodeError" class="text-danger"></span>
+            </div>
+          </div>
+          <div class="row">
+
+            <div class="input-field col s12 m12 l6">
+              <i class="material-icons prefix">contact_phone</i>
+              <input id="phonenumber" type="tel" placeholder="Mobile Number" name="phonenumber">
+              <span id="phonenumberError" class="text-danger"></span>
+            </div>
+          </div>
+          <button class="waves-effect waves-light btn right" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"></script> -->
+      <script>
+        function validateForm() {
+          // Reset error messages
+          document.getElementById("firstnameError").textContent = "";
+          document.getElementById("lastnameError").textContent = "";
+          document.getElementById("townError").textContent = "";
+          document.getElementById("pincodeError").textContent = "";
+          document.getElementById("phonenumberError").textContent = "";
+          document.getElementById("housenameError").textContent = "";
+      
+          var firstname = document.getElementById("firstname").value.trim();
+          if (firstname === "" || firstname.length < 3 || !/^[a-zA-Z]+$/.test(firstname)) {
+            // Handle invalid first name
+            document.getElementById("firstnameError").textContent = "First name must be at least 3 characters long and contain only letters.";
+            return false;
+          }
+      
+          var housename = document.getElementById("housename").value.trim();
+          if (housename === "") {
+            // Handle empty input
+            document.getElementById("housenameError").textContent = "House name is required.";
+            return false;
+          }
+      
+          var lastname = document.getElementById("lastname").value.trim();
+          if (lastname === "" ||!/^[a-zA-Z]+$/.test(lastname)) {
+            // Handle invalid last name
+            document.getElementById("lastnameError").textContent = "Last name must be at least 3 characters long and contain only letters.";
+            return false;
+          }
+      
+          var town = document.getElementById("town").value.trim();
+          if (town === "" || town.length < 2 || town.length > 25) {
+            // Handle invalid town name
+            document.getElementById("townError").textContent = "Town name must be between 2 and 25 characters.";
+            return false;
+          }
+      
+          var pincode = document.getElementById("pincode").value.trim();
+if (pincode === "" || !/^\d{6}$/.test(pincode) || pincode.startsWith('0')) {
+    // Handle invalid pincode
+    if (pincode.startsWith('0')) {
+        document.getElementById("pincodeError").textContent = "Pincode cannot start with 0.";
+    } else {
+        document.getElementById("pincodeError").textContent = "Pincode must be 6 digits.";
+    }
+    return false;
+}
+
+      
+          var phonenumber = document.getElementById("phonenumber").value.trim();
+          if (phonenumber === "" || !/^\d{10}$/.test(phonenumber) || phonenumber.startsWith("0")) {
+            // Handle invalid phone number
+            document.getElementById("phonenumberError").textContent = "Please enter a valid phonenumber.";
+            return false;
+          }
+      
+          // If all conditions are satisfied, return true to submit the form
+          return true;
+        }
+      </script>
+      
+
+</body>
+
+</html>

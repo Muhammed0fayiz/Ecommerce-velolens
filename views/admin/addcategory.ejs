@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Dashboard</title>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/adminsidenavbar.css">
+  <style>
+    /* Your existing styles here */
+
+    /* Optional: Customize styles if needed */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+
+
+    a {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    .container-form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 40%;
+      margin-top: 5rem;
+    }
+
+    /* Style the form for better appearance */
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 8px;
+    }
+
+    input {
+      padding: 8px;
+      margin-bottom: 16px;
+      border-radius: 3rem;
+
+    }
+
+    button {
+      padding: 10px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .error-message {
+      color: red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="sidenavbar">
+    <%- include('sidenavbar') %>
+
+      <div class="content">
+        <!-- Your existing content here -->
+        <h2>Add brand</h2>
+        <div class="container-form">
+          <form id="categoryForm" ">
+        <label for=" inputField">Brand Name</label>
+            <input type="text" id="inputField" name="brandname">
+
+            <% if (typeof errorMessage !=='undefined' ) { %>
+              <div id="alertMessage" class="alert alert-danger text-center">
+                <%= errorMessage %>
+              </div>
+              <% } %>
+
+                <div id="errorMessage" class="error-message"></div>
+
+                <button type="submit">Add brands</button>
+          </form>
+
+
+        </div>
+      </div>
+  </div>
+
+
+
+  <script>
+
+    const NewCategory = async (event) => {
+      event.preventDefault(); // Prevent default form submission behavior
+
+      try {
+        const brandName = document.getElementById('inputField').value;
+
+        const response = await fetch('/admin/addcategory', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ brandname: brandName }),
+        });
+
+        const result = await response.json();
+
+        // Display the message
+        const messageContainer = document.getElementById('errorMessage');
+        messageContainer.innerHTML = `<p>${result.message}</p>`;
+
+        // Show the message container
+        messageContainer.style.display = 'block';
+        setTimeout(() => {
+          messageContainer.innerHTML = '';
+        }, 2000);
+
+        if (result.success) {
+          // Redirect to the specified URL if login is successful
+          window.location.href = '/admin/category';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    document.getElementById('categoryForm').addEventListener('submit', NewCategory);
+
+  </script>
+
+
+
+  <!-- Add Bootstrap JS and Popper.js scripts at the end of the body -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

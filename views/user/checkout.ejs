@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - Your E-commerce</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Your+Chosen+Font&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/headstyle.css">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<style>
+    .product-container {
+        border: 2px solid #ccc;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        overflow: hidden;
+        /* Ensure border-radius is applied to child elements */
+    }
+
+    .index {
+        color: #333;
+        font-size: 18px;
+        margin-bottom: 5px;
+    }
+
+    .product-name {
+        color: #0066cc;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+
+
+    .price,
+    .quantity,
+    .brand,
+    .total-amount {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .total-amount {
+        color: #e44d26;
+        /* Orange color for total amount */
+    }
+
+    .address-item {
+        border: 1px solid #ddd;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+        display: flex;
+        align-items: center;
+        /* Align items vertically in the center */
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+        /* Adjust spacing between radio button and label */
+    }
+
+    .user-details {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .user-name {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .user-phone {
+        color: #007bff;
+        /* Blue color for phone number */
+    }
+</style>
+</head>
+
+<body>
+
+    <%- include('navbarprofile') %>
+
+        <div class="container mt-4">
+            <h1 class="text-primary">Checkout</h1>
+            <hr>
+        </div>
+
+        <div class="container mt-4">
+            <div class="row">
+                <div class="col-lg-4 col-md-12 mt-4">
+                    <% products.forEach(function(product, index) { %> <!-- Opening tag for forEach loop -->
+                        <div class="product-container">
+                            <p class="index"><span style="font-size: 3vh;"> Product: <%= index + 1 %></span></p>
+                            <h4 class="product-name"><strong>
+                                    <%= product.productname %>
+                                </strong></h4>
+                            <!-- <img class="product-image" src="<%= product.image[0] %>" alt=""> -->
+                            <p class="price"><strong>Price:</strong> <span style="color: #0066cc; font-size: 3vh;">₹<%=
+                                        product.price %> </span></p>
+                            <p class="quantity"><strong>Quantity:</strong>
+                                <%= product.quantity %>
+                            </p>
+                            <p class="brand"><strong>Brand:</strong>
+                                <%= product.Category %>
+                            </p>
+                            <p class="total-amount"><strong>Total Amount: ₹ </strong>
+                                <%= product.price * product.quantity %>
+                            </p>
+                        </div>
+                        <% }); %> <!-- Closing tag for forEach loop -->
+
+                </div>
+
+
+
+                <div class="col-lg-4 col-md-12">
+                    <a href="/cart/addaddress"><button
+                            style="background-color: #3498db; color: white; padding: 3px 20px; border-radius: 10px; margin-bottom: 2rem;margin-top: 1.5rem;">Add
+                            address</button>
+                    </a>
+                    <form action="/order/orderconfirm" method="POST" onsubmit="return validateForm()">
+
+                        <h4 style="color: red; margin-bottom: 1rem;"><strong>Select Address</strong></h4>
+
+
+                        <% user.forEach(function(user, index) { %>
+                            <div style="margin-bottom: 2rem;" class="address-item">
+                                <label class="form-check-label" for="<%= user.id %>">
+                                    <div class="user-details">
+                                        <p class="user-name text-warning">
+                                            <%= user.firstname %>
+                                                <%= user.secondname %>
+                                        </p>
+                                        <p>
+                                            <%= user.housename %>, <%= user.city %>
+                                        </p>
+                                        <p>
+                                            <%= user.pincode %>, <%= user.state %>
+                                        </p>
+                                        <p class="user-phone">
+                                            <%= user.phonenumber %>
+                                        </p>
+                                    </div>
+                                </label>
+                                <!-- Inside the loop where you display user addresses -->
+                                <input class="form-check-input" type="radio" name="address" id="<%= user.id %>"
+                                    value="<%= user.id %>" <%=index===0 ? 'checked' : '' %>>
+                            </div>
+                            <% }); %>
+
+                </div>
+
+
+                <div style="margin-top: 3rem;" class="col-lg-4 col-md-12">
+                    <div class="container" style="border: 1px solid #ccc; padding: 10px;background-color: #f9f9f9;">
+                        <div class="column">
+                            <p><span style="color: #007bff;">Wallet Amount:</span> ₹ <%= walletamount.toFixed(2) %></p>
+
+                            </p>
+                            <p><span style="color: #007bff;">Total Items:</span>
+                                <%= totalProductCount %>
+                            </p>
+                            <p><span style="color: #007bff;">Total Price:</span> ₹ <%= totalSum%>
+                            </p>
+                        </div>
+                    </div>
+                    <a href="/showcoupon" style="color: blue; text-decoration:none; margin-top: 1rem;margin-bottom: 1rem; display: block; text-align: center;">Available Coupon</a>
+
+
+                    
+<!-- 
+                    <div class="input-group">
+                        <input id="coupencode" name="coupencode" type="text" class="form-control" placeholder="Enter the code">
+                        <button id="coupenbtn" type="button" class="btn btn-info">Apply Now</button>
+                    </div>
+                     -->
+
+                    <div class="input-group">
+                        <input id="coupencode" name="coupencode" type="text" class="form-control" placeholder="Enter the code">
+                        <button id="coupenbtn" type="button" class="btn btn-info" onclick="applyCoupon(`<%= totalSum%>`)">Apply Now</button>
+                    </div>
+                    <div id="messageContainer"></div>
+                    <h5 class="text-danger">Discount: ₹ <span id="discountValue">0.00</span></h5>
+                    <h5>Total Price: <span id="total-price2">
+                        <%= totalSum%>
+                        </span></h5>
+
+                        
+                    <h4 class="mt-3"><strong>Select Payment Method</strong></h4>
+                    <div class="form-group">
+                        <%if(user&&user.length>0){%>
+                            <label for="payment">Choose a payment method:</label>
+                            <select class="form-control" id="payment" name="payment">
+                                <option value="CashOnDelivery">Cash On Delivery</option>
+                                <option value="OnlinePayment">Online Payment</option>
+                                <option value="WalletPayment">Wallet Payment</option>
+
+                                <!-- Add more options as needed -->
+                            </select>
+                            <%}%>
+
+                    </div>
+                    <p id="validationMessage" style="color: red;"></p>
+                    <!-- <button style="margin-top: 2rem;" type="submit" class="btn btn-primary btn-block" id="orderButton">Place Order</button>   -->
+                    <!-- Online Payment Button -->
+                    <button style="margin-top: 2rem; display: none;" type="submit" class="btn btn-primary btn-block"
+                        id="rzp-button1">Online Payment</button>
+
+                    <button style="margin-top: 2rem; display: none;" type="submit" class="btn btn-primary btn-block"
+                        id="walletPaymentButton">Wallet Payment</button>
+                    <!-- Cash On Delivery Button -->
+                    <button style="margin-top: 2rem; display: inline-block;" type="submit"
+                        class="btn btn-primary btn-block" id="cashOnDeliveryButton">Place Order</button>
+
+
+
+                    </form>
+                </div>
+
+                <div style="margin-top: 5rem;" class="col-md-4">
+                    <!-- Your content goes here -->
+                </div>
+            </div>
+        </div>
+        <!-- take the price into the span  -->
+        <span id="price" data-totalprice="<%= totalSum %>"></span>
+        <script>
+            $(document).ready(function () {
+                // Initially hide the Online Payment and Wallet Payment buttons
+                $("#rzp-button1").hide();
+                $("#walletPaymentButton").hide();
+
+                // Change event for the payment dropdown
+                $("#payment").change(function () {
+                    var selectedOption = $(this).val();
+
+                    // Toggle visibility based on the selected payment option
+                    if (selectedOption === "OnlinePayment") {
+                        $("#rzp-button1").show();
+                        $("#walletPaymentButton").hide();
+                        $("#cashOnDeliveryButton").hide();
+                    } else if (selectedOption === "WalletPayment") {
+                        $("#rzp-button1").hide();
+                        $("#walletPaymentButton").show();
+                        $("#cashOnDeliveryButton").hide();
+                    } else {
+                        $("#rzp-button1").hide();
+                        $("#walletPaymentButton").hide();
+                        $("#cashOnDeliveryButton").show();
+                    }
+                });
+            });
+
+    let alreadyUsedCoupon = false;
+            let overallTotalPrice; // Declare a global variable to store the overall total price
+            async function applyCoupon(totalPrice) {
+                const messageContainer = document.getElementById('messageContainer');
+                if (alreadyUsedCoupon) {
+                    messageContainer.textContent = 'Coupon already applied.';
+                    return;
+                }
+                const coupencode = document.getElementsByName('coupencode')[0].value;
+                try {
+                    console.log(coupencode,'couponcode');
+                    const response = await fetch('/coupencheck', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ coupencode }),
+                    });
+                    if (!response.ok) {
+                        messageContainer.textContent = `already use a coupen`;
+                        setTimeout(() => {
+                            messageContainer.textContent = ""
+                        }, 2000);
+                        return;
+                    }
+                    const data = await response.json();
+                    if (data.success) {
+                        if (data.success) {
+                            console.log('inside sucess');
+                            const discountValue = data.discount || 0;
+                            const amountLimit = data.amount || 0;
+
+                            // Check if the total amount is greater than the discount
+                            if (totalPrice > discountValue) {
+                                if (totalPrice >= amountLimit) {
+                                    messageContainer.textContent = 'Coupon code is valid and not expired.';
+                                    setTimeout(() => {
+                                        messageContainer.textContent = "";
+                                    }, 2000);
+                                    console.log('inside to if');
+                                    overallTotalPrice = totalPrice - discountValue; // Update the global variable
+                                    document.getElementById('discountValue').textContent = discountValue.toFixed(2);
+                                    document.getElementById('total-price2').textContent = `₹${overallTotalPrice.toFixed(2)}`;
+                                    // document.getElementById('total-price3').textContent = `₹${overallTotalPrice.toFixed(2)}`;
+                                    alreadyUsedCoupon = true;
+                                } else {
+                                    messageContainer.textContent = 'Your purchase amount is not greater than the coupon purchase amount. You are not eligible for this coupon.';
+                                    setTimeout(() => {
+                                        messageContainer.textContent = "";
+                                    }, 4000);
+                                }
+                            } else {
+                                messageContainer.textContent = 'Coupon code is either expired or invalid: ' + data.message;
+                                setTimeout(() => {
+                                    messageContainer.textContent = "";
+                                }, 4000);
+                            }
+                        } else {
+                            messageContainer.textContent = `Failed to apply coupon: `;
+                            setTimeout(() => {
+                                messageContainer.textContent = "";
+                            }, 4000);
+                            return;
+                        }
+                    }
+                } catch (error) {
+                    messageContainer.textContent = `Error applying coupon: ${error.message}`;
+                    console.error('Error applying coupon:', error);
+                }
+            }
+
+            let orderId;
+            let price = document.getElementById('price')
+            let orderprice = price.getAttribute('data-totalprice')
+            $(document).ready(function () {
+                var settings = {
+                    "url": "/create/orderId",
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({
+                        "amount":  (overallTotalPrice || orderprice)*100
+                    }),
+                };
+
+                //creates new orderId everytime
+                $.ajax(settings).done(function (response) {
+                    orderId = response.orderId;
+                    orderprice = response.orderprice; // Assign response.orderprice to orderprice
+                    ordresignature = response.signature
+                    console.log(orderId);
+                    $("#rzp-button1").show();
+                });
+            });
+            console.log("price is", orderprice);
+            document.getElementById('rzp-button1').onclick = function (e) {
+                var options = {
+                    "key": "rzp_test_BLFOsAviK4G3wC",
+                    "amount":  (overallTotalPrice || orderprice) * 100,
+                    "currency": "INR",
+                    "name": "Velocity",
+                    "description": "Online Payment",
+                    "image": "",
+                    "order_id": orderId,
+                    "handler": function (response) {
+                        // Create a form dynamically
+                        var form = document.createElement('form');
+                        form.method = 'post';
+                        form.action = '/order/orderconfirm';  // Replace with the URL you want to redirect to
+                        // Create an input element to hold the payment ID
+                        var paymentIdInput = document.createElement('input');
+                        paymentIdInput.type = 'hidden';
+                        paymentIdInput.name = 'razorpay_payment_id';
+                        paymentIdInput.value = response.razorpay_payment_id;
+                        // Add the input element to the form
+                        form.appendChild(paymentIdInput);
+                        // Add hidden input fields for payment mode and address details
+                        var paymentModeInput = document.createElement('input');
+                        paymentModeInput.type = 'hidden';
+                        paymentModeInput.name = 'payment';
+                        paymentModeInput.value = document.getElementById('payment').value; // Assumes the payment mode is selected through a dropdown
+                        form.appendChild(paymentModeInput);
+                        coupencode.value = document.getElementById('coupencode').value; // Assumes the payment mode is selected through a dropdown
+                        form.appendChild(coupencode);
+                        var selectedAddressInput = document.querySelector('input[name="address"]:checked');
+                        if (selectedAddressInput) {
+                            var addressIdInput = document.createElement('input');
+                            addressIdInput.type = 'hidden';
+                            addressIdInput.name = 'address';
+                            addressIdInput.value = selectedAddressInput.value;
+                            form.appendChild(addressIdInput);
+                        }
+                        // Append the form to the body
+                        document.body.appendChild(form);      // Submit the form
+                        form.submit();
+                    }
+                };
+                var rzp1 = new Razorpay(options);
+                rzp1.on('payment.failed', function (response) {
+                    alert(response.error.code);
+                    alert(response.error.description);
+                    alert(response.error.source);
+                    alert(response.error.step);
+                    alert(response.error.reason);
+                    alert(response.error.metadata.order_id);
+                    alert(response.error.metadata.payment_id);
+                });
+                rzp1.open();
+                e.preventDefault();
+            }
+        </script>
+        <script>
+            function validateForm() {
+                var selectedAddress = document.querySelector('input[name="address"]:checked');
+                var validationMessage = document.getElementById('validationMessage');
+                var totalSum = parseInt('<%= totalSum %>'); // Parse total sum to a numeric value
+                var walletAmount = parseInt('<%= walletamount %>'); // Parse wallet amount to a numeric value
+
+                if (!selectedAddress) {
+                    validationMessage.innerText = "Please select an address before placing the order";
+                    return false; // Prevent the form from submitting
+                } else if (totalSum > 1000 && document.getElementById('payment').value === 'CashOnDelivery') {
+                    validationMessage.innerText = "Cash on delivery is not available for orders above ₹1000";
+                    return false; // Prevent the form from submitting
+                } else if (totalSum > walletAmount && document.getElementById('payment').value === 'WalletPayment') {
+                    validationMessage.innerText = "your total amout is more than available Walletamout";
+                    return false; // Prevent the form from submitting
+                } else {
+                    validationMessage.innerText = ""; // Clear any previous validation message
+                }
+                return true; // Allow the form to submit
+            }
+        </script>
+
+
+
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

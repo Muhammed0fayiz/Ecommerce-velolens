@@ -1,0 +1,166 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title> Coupon Code Web Design</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            /*the complete project is in the following link:
+https://github.com/vkive/coupon-code.git
+Follow me on Codepen
+*/
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
+
+.container {
+    width: 100%; /* Change width to 100% for responsiveness */
+    height: auto; /* Adjust height to auto */
+    background: #f0fff3;
+    display: flex;
+    flex-wrap: wrap; /* Allow cards to wrap */
+    align-items: center;
+    justify-content: center;
+    padding: 20px; /* Add some padding */
+}
+
+.coupon-card {
+    background: linear-gradient(135deg, #7158fe, #9d4de6);
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.15);
+    position: relative;
+    margin: 20px; /* Adjust margin for spacing between cards */
+    flex: 0 1 calc(50% - 40px); /* Set card width to 50% with some spacing */
+    max-width: calc(50% - 40px); /* Set max-width to maintain two cards per row */
+}
+
+.logo {
+    width: 60px; /* Adjust logo size */
+    border-radius: 8px;
+    margin-bottom: 10px; /* Adjust margin */
+}
+
+.coupon-card h4 {
+    font-size: 22px; /* Adjust font size */
+    font-weight: 400;
+    line-height: 30px; /* Adjust line height */
+    margin-bottom: 10px; /* Adjust margin */
+}
+
+.coupon-card p {
+    font-size: 14px; /* Adjust font size */
+    margin-bottom: 10px; /* Adjust margin */
+}
+
+.coupon-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px auto; /* Adjust margin */
+    width: fit-content;
+}
+
+.cpnCode {
+    border: 1px dashed #fff;
+    padding: 8px 16px; /* Adjust padding */
+    border-right: 0;
+}
+
+.cpnBtn {
+    border: 1px solid #fff;
+    background: #fff;
+    padding: 8px 16px; /* Adjust padding */
+    color: #7158fe;
+    cursor: pointer;
+}
+
+.circle1, .circle2 {
+    background: #f0fff3;
+    width: 40px; /* Adjust circle size */
+    height: 40px; /* Adjust circle size */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.circle1 {
+    left: -20px; /* Adjust position */
+}
+
+.circle2 {
+    right: -20px; /* Adjust position */
+}
+
+/* Media Queries for Responsiveness */
+@media only screen and (max-width: 768px) {
+    .container {
+        padding: 10px; /* Adjust padding */
+    }
+    
+    .coupon-card {
+        flex: 0 1 calc(100% - 40px); /* Set card width to 100% */
+        max-width: calc(100% - 40px); /* Set max-width to full width */
+    }
+}
+
+        </style>
+    </head>
+    <body>
+       <a href="/couponbackbutton"><button style="color: white; background-color: #4CAF50; border: none; border-radius: 5px; padding: 10px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; width: 150px; margin-top: 20px; margin-left: 10px; cursor: pointer; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s;">Back</button></a> 
+
+
+        <%if(coupons && coupons.length>0){%>
+
+        <div class="container">
+          
+            <% coupons.forEach(function(coupon) { %>
+                
+                <div class="coupon-card">
+                    <img src="/img/logo4.png" class="logo">
+                    <h4><%= coupon.couponcode %><br>Purchased Amount: <%= coupon.purchaseamount %><br>
+                        <h5>Discount: <%= coupon.discount %>%</h5>
+                    </h4>
+                    <div class="coupon-row">
+                        <span class="cpnCode"><%= coupon.couponcode %></span>
+                        <button class="cpnBtn">Copy Code</button>
+                    </div>
+                    <p>Valid Till: <%= coupon.expiredate %></p>
+                    <div class="circle1"></div>
+                    <div class="circle2"></div>
+                </div>
+            <% }); %>
+        </div>
+        
+        <%}else{ %>
+            
+            <p style="color: #3498db;text-align: center;font-size: 4rem;margin-top: 3rem;">No Available Coupon</p>
+    
+    
+        <%}%>
+        
+        <script>
+            var cpnBtns = document.querySelectorAll(".coupon-card .cpnBtn");
+            
+            cpnBtns.forEach(function(cpnBtn) {
+                cpnBtn.addEventListener("click", function() {
+                    var cpnCode = this.parentElement.querySelector(".cpnCode");
+                    navigator.clipboard.writeText(cpnCode.innerText);
+                    this.innerText = "COPIED";
+                    setTimeout(function() {
+                        cpnBtn.innerText = "COPY CODE";
+                    }, 3000);
+                });
+            });
+        </script>
+    </body>
+    </html>

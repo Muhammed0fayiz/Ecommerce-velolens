@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="/style/mdb.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"
+    integrity="sha256-oP6HI/tTQGzNvDE5Kt7FUaLGeQkTvLZSK+5F8IfRdA8=" crossorigin="anonymous"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: white;
+      align-items: center;
+      height: 50vh;
+      margin: 0;
+      background-color: lavenderblush;
+    }
+
+    .login-container {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 40px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      height: 96vh;
+    }
+
+
+    .logo {
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: -43px;
+    }
+
+    .logo img {
+      margin-top: 5px;
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-sizing: border-box;
+      margin-top: -3px;
+    }
+
+    .login-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 3px;
+
+    }
+
+    .signup-link {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    form i {
+      margin-left: -30px;
+      cursor: pointer;
+    }
+
+
+    .gradient-custom-3 {
+      /* fallback for old browsers */
+      background: #84fab0;
+
+      /* Chrome 10-25, Safari 5.1-6 */
+      background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
+
+      /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      background: linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
+    }
+
+    #fullNameError,
+    #emailError,
+    #passwordError,
+    #confirmPasswordError {
+      color: red;
+      /* Set the text color to red */
+      font-size: 12px;
+      /* Set the font size */
+      margin-top: 0px;
+      /* Add some space above the error message */
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .password {
+      padding-right: 30px;
+      /* Adjust the padding based on the icon size */
+    }
+
+    #togglePassword {
+      position: absolute;
+      top: 50%;
+      right: 5px;
+      /* Adjust the right position based on the desired spacing */
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- navbar -->
+
+  <section>
+    <!-- login container -->
+    <div class="login-container mt-1 gradient-custom-3">
+      <div class="logo">
+        <img src="/img/logo4.png" alt="Logo">
+      </div>
+
+      <form action="/signupPost" method="post" id="form">
+        <div class="form-group">
+            <label for="Full name">Full Name</label>
+            <input type="name" name="name">
+            <div id="fullNameError" class="error-message"></div>
+        </div>
+    
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" name="email">
+            <div id="emailError" class="error-message"></div>
+        </div>
+    
+        <div class="form-group password-toggle">
+            <label for="password">Password </label>
+            <div class="password-wrapper">
+                <input class="password" type="password" name="password" id="passwordInput">
+                <i class="fas fa-eye" id="togglePassword"></i>
+            </div>
+            <div id="passwordError" class="error-message"></div>
+        </div>
+    
+        <div class="form-group">
+            <label for="password">Confirm Password</label>
+            <input class="conformPassword" type="password" name="conformPassword">
+            <div id="confirmPasswordError" class="error-message"></div>
+        </div>
+    
+        <!-- Add this snippet in your EJS template to display the error message -->
+        <% if(typeof errorMessage !=='undefined' ) { %>
+            <div class="error-message text-danger ">
+                <%= errorMessage %>
+            </div>
+        <% } %>
+    
+        <button type="submit" class="login-button">Register</button>
+    </form>
+    
+    <script>
+        document.getElementById('form').addEventListener('submit', function (event) {
+            var isValid = true;
+    
+            // Full Name validation
+            var fullNameInput = document.getElementsByName('name')[0];
+            var fullNameValue = fullNameInput.value.trim();
+            var fullNameError = document.getElementById('fullNameError');
+    
+            if (fullNameValue.length < 3) {
+                isValid = false;
+                fullNameError.innerText = 'Enter at least 3 letters';
+            } else if (!/^[a-zA-Z ]+$/.test(fullNameValue)) {
+                isValid = false;
+                fullNameError.innerText = 'Name should not contain numbers';
+            } else {
+                fullNameError.innerText = '';
+            }
+    
+            // Email validation
+            var emailInput = document.getElementsByName('email')[0];
+            var emailValue = emailInput.value.trim();
+            var emailError = document.getElementById('emailError');
+    
+            if (emailValue.length < 10 || !isValidEmail(emailValue)) {
+                isValid = false;
+                emailError.innerText = 'Please enter a valid email address';
+            } else {
+                emailError.innerText = '';
+            }
+    
+            // Password validation
+            var passwordInput = document.getElementsByName('password')[0];
+            var passwordValue = passwordInput.value;
+            var passwordError = document.getElementById('passwordError');
+    
+            // Password strength criteria
+            var hasUpperCase = /[A-Z]/.test(passwordValue);
+            var hasLowerCase = /[a-z]/.test(passwordValue);
+            var hasNumbers = /\d/.test(passwordValue);
+            var hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(passwordValue);
+    
+            if (passwordValue.length < 6) {
+                isValid = false;
+                passwordError.innerText = 'Enter a strong password (at least 6 characters)';
+            } else if (!(hasUpperCase && hasLowerCase && hasNumbers && hasSpecialChars)) {
+                isValid = false;
+                passwordError.innerText = 'Password should contain at least one uppercase letter, one lowercase letter, one number, and one special character';
+            } else {
+                passwordError.innerText = '';
+            }
+    
+            // Confirm Password validation
+            var confirmPasswordInput = document.getElementsByName('conformPassword')[0];
+            var confirmPasswordValue = confirmPasswordInput.value;
+            var confirmPasswordError = document.getElementById('confirmPasswordError');
+    
+            if (confirmPasswordValue !== passwordValue) {
+                isValid = false;
+                confirmPasswordError.innerText = 'Passwords do not match.';
+            } else {
+                confirmPasswordError.innerText = '';
+            }
+    
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    
+        // Email validation helper function
+        function isValidEmail(email) {
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+    </script>
+    
+
+  <script>
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      var passwordInput = document.getElementById('passwordInput');
+      var passwordToggle = document.getElementById('togglePassword');
+
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        passwordToggle.classList.remove('fa-eye');
+        passwordToggle.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        passwordToggle.classList.remove('fa-eye-slash');
+        passwordToggle.classList.add('fa-eye');
+      }
+    });
+
+    document.getElementById('form').addEventListener('submit', function (event) {
+      // ... (your existing form validation logic) ...
+    });
+
+    // Email validation helper function
+    function isValidEmail(email) {
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+  </script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

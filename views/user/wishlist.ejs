@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Your+Chosen+Font&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="/css/headstyle.css">
+    <!-- DataTable HEADER-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+
+
+    /*-- VARIABLES CSS--*/
+    /*Colores*/
+    :root {
+      --first-color: #E3F8FF;
+      --second-color: #DCFAFB;
+      --third-color: #FFE8DF;
+      --accent-color: #FF5151;
+      --dark-color: #161616;
+    }
+
+    /*Tipografia responsive*/
+    :root {
+      --body-font: 'Open Sans';
+      --h1-font-size: 1.5rem;
+      --h3-font-size: 1rem;
+      --normal-font-size: 0.938rem;
+      --smaller-font-size: 0.75rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      :root {
+        --h1-font-size: 2rem;
+        --normal-font-size: 1rem;
+        --smaller-font-size: 0.813rem;
+      }
+    }
+
+    /*-- BASE --*/
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #fff;
+      color: var(--dark-color);
+      font-family: var(--body-font);
+    }
+
+    h1 {
+      font-size: var(--h1-font-size);
+    }
+
+ 
+
+    a {
+      text-decoration: none;
+    }
+
+    /*-- LAYAOUT --*/
+    .main {
+      padding: 2rem 0;
+    }
+
+    .bd-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      max-width: 1200px;
+      margin-left: 2.5rem;
+      margin-right: 2.5rem;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    /*-- PAGES --*/
+    .title-shop {
+      position: relative;
+      margin: 0 2.5rem;
+    }
+
+    .title-shop::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      width: 72px;
+      height: 2px;
+      background-color: var(--dark-color);
+      margin-left: .25rem;
+    }
+
+    /*-- COMPONENT --*/
+
+   
+  .col-md-2 {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .title-shop {
+      color: red;
+    }
+
+    @import 'https://fonts.googleapis.com/css?family=Open+Sans:600,700';
+
+* {font-family: 'Open Sans', sans-serif;}
+
+.rwd-table {
+  margin: auto;
+  min-width: 300px;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.rwd-table tr:first-child {
+  border-top: none;
+  background:aqua;
+  color: black;
+}
+
+.rwd-table tr {
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-color: #f5f9fc;
+}
+
+.rwd-table tr:nth-child(odd):not(:first-child) {
+  background-color: #ebf3f9;
+}
+
+.rwd-table th {
+  display: none;
+}
+
+.rwd-table td {
+  display: block;
+}
+
+.rwd-table td:first-child {
+  margin-top: .5em;
+}
+
+.rwd-table td:last-child {
+  margin-bottom: .5em;
+}
+
+.rwd-table td:before {
+  content: attr(data-th) ": ";
+  font-weight: bold;
+  width: 120px;
+  display: inline-block;
+  color: #000;
+}
+
+.rwd-table th,
+.rwd-table td {
+  text-align: left;
+}
+
+.rwd-table {
+  color: #333;
+  border-radius: .4em;
+  overflow: hidden;
+}
+
+.rwd-table tr {
+  border-color: #bfbfbf;
+}
+
+.rwd-table th,
+.rwd-table td {
+  padding: .5em 1em;
+}
+@media screen and (max-width: 601px) {
+  .rwd-table tr:nth-child(2) {
+    border-top: none;
+  }
+}
+@media screen and (min-width: 600px) {
+  .rwd-table tr:hover:not(:first-child) {
+    background-color: #d8e7f3;
+  }
+  .rwd-table td:before {
+    display: none;
+  }
+  .rwd-table th,
+  .rwd-table td {
+    display: table-cell;
+    padding: .25em .5em;
+  }
+  .rwd-table th:first-child,
+  .rwd-table td:first-child {
+    padding-left: 0;
+  }
+  .rwd-table th:last-child,
+  .rwd-table td:last-child {
+    padding-right: 0;
+  }
+  .rwd-table th,
+  .rwd-table td {
+    padding: 1em !important;
+  }
+}
+
+
+/* THE END OF THE IMPORTANT STUFF */
+
+/* Basic Styling */
+
+h1 {
+  text-align: center;
+  font-size: 2.4em;
+  color: #f2f2f2;
+}
+.container {
+  display: block;
+  text-align: center;
+}
+h3 {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  font-size: 1.5em;
+  color: #cecece;
+}
+h3:before {
+  content: "\25C0";
+  position: absolute;
+  left: -50px;
+  -webkit-animation: leftRight 2s linear infinite;
+  animation: leftRight 2s linear infinite;
+}
+h3:after {
+  content: "\25b6";
+  position: absolute;
+  right: -50px;
+  -webkit-animation: leftRight 2s linear infinite reverse;
+  animation: leftRight 2s linear infinite reverse;
+}
+@-webkit-keyframes leftRight {
+  0%    { -webkit-transform: translateX(0)}
+  25%   { -webkit-transform: translateX(-10px)}
+  75%   { -webkit-transform: translateX(10px)}
+  100%  { -webkit-transform: translateX(0)}
+}
+@keyframes leftRight {
+  0%    { transform: translateX(0)}
+  25%   { transform: translateX(-10px)}
+  75%   { transform: translateX(10px)}
+  100%  { transform: translateX(0)}
+}
+
+
+  </style>
+</head>
+
+<body>
+
+  <body>
+    <%- include('navbarprofile') %>
+      <div class="d-flex flex-row " style="justify-content: space-between;">
+        <div>
+        
+        </div>
+      </div>
+    
+      <div class="container">
+        <h1 class="title-shop mt-1 mb-2">WishList</h1>
+          <table class="rwd-table">
+            <thead>
+              <%if(wishlist && wishlist.length>0){%>
+              <tr>
+                <th>No</th>
+                <th>Image</th>
+                <th> Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Model</th>
+                <th>Rating</th>
+                <th>View More</th>
+                <th>Delete</th>
+         
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                
+                <% wishlist.forEach((item,index) => { %>
+                  <tr>
+                    <td><%=index+1%></td>
+                    <td> <img style="width: 4vw; height: 4vh;"  src="<%= item.image %>" alt=""></td>
+                    <td><%= item.productname %></td>
+                    <td><%= item.Category %></td>
+                    <td><%= item.price %></td>
+                    <td><%= item.model %></td>
+                    <td><%= item.rating %></td>
+                   
+                    <td><a href="/productView/<%=item.productid%>"><button style="background-color: blue; color: white; border: none; padding: 10px 20px; border-radius: 5px;">View More</button></a>
+                    </td>
+                    <td>
+                      <a href="/wishlist/wishlistremove/<%= item._id %>" onclick="confirmRemove(event)">
+                          <button style="background-color: red; color: white; border: none; padding: 10px 20px; border-radius: 5px;">Remove</button>
+                      </a>
+                  </td>
+                  
+                  </tr>
+                <% }); %>
+                
+          
+            </tbody>
+          </table>
+          <h3>Resize Me</h3>
+          <%}else{ %>
+            
+            <p style="color: #3498db; font-size: 30px; font-weight: bold; text-align: center; width: 100%;">No item in Cart</p>
+    
+    
+        <%}%>
+        </div>
+
+          <!-- Include the following script in your HTML file -->
+   
+
+          <script>
+            function confirmRemove(event) {
+              event.preventDefault(); // Prevent the default action (following the link)
+        
+              // Show SweetAlert confirmation dialog
+              Swal.fire({
+                title: "Are you sure?",
+                text: "Once removed, you will not be able to recover this item!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, remove it!",
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // If confirmed, follow the link
+                  window.location.href = event.target.parentElement.href;
+                }
+              });
+            }
+          </script>
+          <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+          <script src="https://unpkg.com/ionicons@5.0.0/dist/ionicons.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+
+  </body>
+</body>
+
+</html>

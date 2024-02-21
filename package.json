@@ -1,0 +1,35 @@
+{
+  "name": "hanger",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cache": "^3.0.0",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "exceljs": "^4.4.0",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.1.0",
+    "mongoose-paginate": "^5.0.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "no": "^0.0.1",
+    "nocache": "^4.0.0",
+    "nodemailer": "^6.9.7",
+    "nodemon": "^3.0.2",
+    "pagination": "^0.4.6",
+    "pdfkit": "^0.14.0",
+    "pdfkit-table": "^0.1.99",
+    "razorpay": "^2.9.2"
+  }
+}

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Responsive Dashboard</title>
+  <!-- Add Bootstrap CSS link -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/adminsidenavbar.css">
+  <!-- DataTable HEADER-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
+
+
+  <style>
+    /* Your existing styles here */
+
+    /* Optional: Customize styles if needed */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+
+    a {
+      text-decoration: none;
+      color: #fff;
+
+    }
+
+    a:hover {
+      text-decoration: none;
+      color: #fff;
+    }
+
+    /* wrap the table */
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="sidenavbar">
+    <%- include('sidenavbar') %>
+
+      <div class="content">
+        <!-- Your existing content here -->
+        <h2>Product list</h2>
+        <a href="/admin/productlist/addProduct"><button
+            style="color: white; background-color: #3085df; width: 15vh; height: 5vh; font-size: 2vh; border-radius: 1vh; border: none;margin-bottom: 1rem;">Add
+            product</button></a>
+
+            <%if(data && data.length>0){%>
+
+
+      <table id="example" class="table table-striped mt-2 table table-sm" style="width:100%">
+
+            <thead>
+              <tr>
+                <th style="background-color: aqua;color:blue;">ID</th>
+                 <th style="background-color: aqua;color:blue;">ProductName</th>
+                 <th style="background-color: aqua;color:blue;">Category</th>
+                 <th style="background-color: aqua;color:blue;">Model</th>
+                 <th style="background-color: aqua;color:blue;">Stock</th>
+                 <th style="background-color: aqua;color:blue;">Price</th>
+                 <th style="background-color: aqua;color:blue;">Rating</th>
+
+                 <th style="background-color: aqua;color:blue;">Img</th>
+                 <th style="background-color: aqua;color:blue;">Is listed</th>
+                 <th style="background-color: aqua;color:blue;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userTableBody">
+              <% if(data && data.length> 0) { %>
+                <% data.forEach((product,index)=> { %>
+                  <tr>
+                    <td>
+                      <%= index+1 %>
+                    </td>
+                    <td>
+                      <%= product.productName %>
+                    </td>
+                    <td>
+                      <%= product.Category.category %>
+                    </td>
+                    <td>
+                      <%= product.Model %>
+                    </td>
+                    <td>
+                      <%= product.Stock %>
+                    </td>
+                    <td>
+                      <%= product.Price %>
+                    </td>
+                    <td>
+                      <%= product.Rating %>
+                    </td>
+
+
+                    <td>
+
+                      <img style="width: 4vw; height: 3vh;" src="<%=product.image[0] %>" alt="">
+
+                    </td>
+                    <td>
+                      <a href="/admin/productlisted/<%= product._id %>">
+                        <button  class="btn rounded-pill btn-<%= product.islisted ? 'success' : 'danger' %>">
+                          <%= product.islisted ? 'listed' : 'unlisted' %>
+                        </button>
+                      </a>
+
+                    </td>
+
+                    <td><a href="/admin/updateProduct/<%=product._id%>"><button
+                          class="btn bg-success mx-3 rounded-pill text-light">Update</button></a>
+                          <a href="#" onclick="confirmDelete('<%=product._id%>')">
+                            <button class="btn bg-danger rounded-pill text-light">remove</button>
+                          </a>
+                  </tr>
+                  <% }); %>
+                    <% } %>
+            </tbody>
+          </table>
+          <%}else{ %>
+            
+            <p style="color: #3498db; font-size: 30px; font-weight: bold; text-align: center; width: 100%;margin-left: 1rem;margin-top: 3rem;">No product</p>
+    
+    
+        <%}%>
+        </div>
+
+
+
+
+
+      </div>
+  </div>
+  </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <script>
+    function confirmDelete(productId) {
+      // Use SweetAlert instead of confirm
+      Swal.fire({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this product!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#dc3545",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Yes, delete it!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // If user clicks OK in the SweetAlert dialog, redirect to the delete URL
+          window.location.href = "/admin/deleteProduct/" + productId;
+        }
+      });
+    }
+  </script>
+  
+ <!-- DATATABLE  SCRIPT-->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>  
+<script>
+   new DataTable('#example');
+   
+  </script>
+<script>
+  function showConfirmation() {
+    Swal.fire({
+      title: 'Logout Confirmation',
+      text: 'Are you sure you want to log out?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Logout',
+      cancelButtonText: 'Cancel',
+      customClass: {
+        title: 'swal-title',
+        text: 'swal-text',
+        confirmButton: 'swal-button--confirm',
+        cancelButton: 'swal-button--cancel'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        performLogout();
+      }
+    });
+  }
+
+  function performLogout() {
+    // Add your logout logic here
+    // For example, redirect to the logout URL
+    window.location.href = "/admin/logout";
+  }
+</script>
+  <!-- Add Bootstrap JS and Popper.js scripts at the end of the body -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

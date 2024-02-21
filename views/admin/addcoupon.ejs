@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Dashboard</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/adminsidenavbar.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <!-- DataTable HEADER-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.6/dist/sweetalert2.all.min.js"></script>
+    <style>
+        /* Your existing styles here */
+
+        /* Optional: Customize styles if needed */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        a {
+            text-decoration: none;
+            color: #fff;
+
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: #fff;
+        }
+
+        table {
+            width: 75%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ff00c8;
+            color: #fff;
+            font-size: 2vh;
+        }
+
+        td {
+            font-size: 2vh;
+        }
+
+
+        button {
+            width: 5rem;
+            height: 2.2rem;
+            border-radius: 2rem;
+            color: white;
+            border: none
+        }
+
+        .word-wrap {
+            max-width: 150px;
+            /* You can adjust this value based on your requirement */
+            word-wrap: break-word;
+        }
+        .form-container {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+    
+    /* Style for the form labels */
+    label {
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    /* Style for the form inputs */
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    button[type="submit"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    
+    /* Style for the submit button */
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    
+    /* Change button color on hover */
+    button[type="submit"]:hover {
+        background-color: #45a049;
+    }
+    .error {
+        color: red;
+    }
+    </style>
+</head>
+
+<body>
+
+    <div class="sidenavbar">
+        <%- include('sidenavbar') %>
+
+
+            <div class="content">
+                <!-- Your existing content here -->
+              
+                <div class="form-container">
+                    <form id="couponForm" action="/admin/addcouponpost" method="POST" onsubmit="return validateForm()">
+                        <label for="couponCode">Coupon Code:</label>
+                        <input type="text" id="couponCode" name="couponCode">
+                        <span id="couponCodeError" class="error"></span><br><br>
+                        
+                        <label for="purchaseAmount">Purchase Amount:</label>
+                        <input type="number" id="purchaseAmount" name="purchaseAmount">
+                        <span id="purchaseAmountError" class="error"></span><br><br>
+                    
+                        <label for="discount">Discount:</label>
+                        <input type="number" id="discount" name="discount">
+                        <span id="discountError" class="error"></span><br><br>
+                                        
+                        <label for="expireDate">Expiration Date:</label>
+                        <input type="date" id="expireDate" name="expireDate">
+                        <span id="expireDateError" class="error"></span><br><br>
+                                        
+                        <button type="submit">Add Coupon</button>
+                    </form>
+                    
+                </div>
+                
+            </div>
+    </div>
+    <script>
+        function validateForm() {
+            var couponCode = document.getElementById("couponCode").value.trim();
+            var purchaseAmount = document.getElementById("purchaseAmount").value;
+            var discount = document.getElementById("discount").value;
+            var expireDate = document.getElementById("expireDate").value;
+            var today = new Date(); // Get today's date
+    
+            var couponCodeError = document.getElementById("couponCodeError");
+            var purchaseAmountError = document.getElementById("purchaseAmountError");
+            var discountError = document.getElementById("discountError");
+            var expireDateError = document.getElementById("expireDateError");
+    
+            couponCodeError.textContent = "";
+            purchaseAmountError.textContent = "";
+            discountError.textContent = "";
+            expireDateError.textContent = "";
+    
+            if (couponCode.length < 2) {
+                couponCodeError.textContent = "Coupon code must be at least 2 characters long.";
+                return false;
+            }
+    
+            if (purchaseAmount === "") {
+                purchaseAmountError.textContent = "Please enter purchase amount.";
+                return false;
+            }
+    
+            if (parseFloat(purchaseAmount) <= 100) {
+                purchaseAmountError.textContent = "Purchase amount must be more than 100.";
+                return false;
+            }
+    
+            if (discount === "") {
+                discountError.textContent = "Please enter discount amount.";
+                return false;
+            }
+    
+            if (parseFloat(discount) <= 0) {
+                discountError.textContent = "Discount must be greater than 0%.";
+                return false;
+            }
+    
+            if (parseFloat(discount) >= 70) {
+                discountError.textContent = "Discount must be less than 70%.";
+                return false;
+            }
+    
+            if (expireDate === "") {
+                expireDateError.textContent = "Please select expiration date.";
+                return false;
+            }
+    
+            // Convert expiration date string to Date object
+            var selectedExpireDate = new Date(expireDate);
+    
+            // Compare expiration date with today's date
+            if (selectedExpireDate <= today) {
+                expireDateError.textContent = "Expiration date must be greater than today's date.";
+                return false;
+            }
+    
+            // Make a fetch request to the server
+            fetch('/admin/addcouponpost', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    couponCode: couponCode,
+                    purchaseAmount: purchaseAmount,
+                    discount: discount,
+                    expireDate: expireDate
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Redirect if everything is okay
+                    window.location.href = '/admin/coupon';
+                } else {
+                    // Handle error response
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data && data.error) {
+                    // Display error message in the corresponding input field
+                    couponCodeError.textContent = data.error;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle other errors
+            });
+    
+            // Prevent the form from submitting
+            return false;
+        }
+    </script>
+    
+    
+    
+    
+    <script>
+        function showConfirmation() {
+            Swal.fire({
+                title: 'Logout Confirmation',
+                text: 'Are you sure you want to log out?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Logout',
+                cancelButtonText: 'Cancel',
+                customClass: {
+                    title: 'swal-title',
+                    text: 'swal-text',
+                    confirmButton: 'swal-button--confirm',
+                    cancelButton: 'swal-button--cancel'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    performLogout();
+                }
+            });
+        }
+
+        function performLogout() {
+            // Add your logout logic here
+            // For example, redirect to the logout URL
+            window.location.href = "/admin/logout";
+        }
+    </script>
+    <!-- Add Bootstrap JS and Popper.js scripts at the end of the body -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

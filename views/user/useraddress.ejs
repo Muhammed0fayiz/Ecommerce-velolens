@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/headstyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header,
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+
+
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 10px;
+            }
+
+            .profile-picture {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .profile-info {
+                text-align: left;
+            }
+
+            .profile-info {
+                margin-bottom: 30px;
+            }
+        }
+
+
+
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+
+        #sidebar {
+            height: 100%;
+            width: 10rem;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            padding-top: 20px;
+        }
+
+        #sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #main {
+            margin-left: 250px;
+            padding: 16px;
+        }
+
+        /* Animation styles */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .btn-animate {
+            position: relative;
+        }
+
+        .btn-animate .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .custom-popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .popup-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .address-details {
+            max-width: 40rem;
+            margin-left: -1rem;
+            margin-top: 1rem;
+            padding-left: 60px;
+            padding-bottom: 2rem;
+            border: 1px solid #3498db;
+            /* Change border color to a nice blue */
+            border-radius: 8px;
+            background-color: #ecf0f1;
+            /* Light gray background color */
+            box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+            /* Slightly increased shadow */
+
+        }
+
+        .header-section {
+            margin-bottom: 20px;
+        }
+
+        .name-section {
+            font-size: 1.5em;
+            /* Increased font size */
+            margin-top: 5px;
+            color: #2ecc71;
+            /* Green color for names */
+        }
+
+        .address-section {
+            margin-bottom: 15px;
+        }
+
+        .address-line {
+            margin: 5px 0;
+            color: #333;
+            /* Darker text color for address lines */
+        }
+
+        .contact-section {
+            font-weight: bold;
+            color: #e74c3c;
+            /* Red color for contact section */
+        }
+
+        .address-actions {
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 20px;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+            /* Red button for Edit */
+            color: #fff;
+        }
+
+        .btn-primary {
+            background-color: #3498db;
+            /* Blue button for Delete */
+            color: #fff;
+        }
+
+        .btn:hover {
+            filter: brightness(90%);
+            /* Slight hover effect */
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3">
+                <%-include('usernavbar')%>
+            </div>
+
+
+            <div class="col-md-9">
+               
+                <div>
+                  
+                        <a href="/profile/addaddress"><button class="btn btn-primary rounded-pill mt-5"
+                                style="width: 7.5rem;">Add Address</button></a>
+                </div>
+                <% if (data.length> 0) { %>
+                <div id="addressContainer" class="address-container">
+                    <!-- Assuming 'addresses' is an array containing address data -->
+                    <% data.forEach(function(data,index) { %>
+                        <div class="address-details">
+                            <div class="header-section">
+                                <p class="mt-3 mb-0 text-info">address:<%=index+1%>
+                                </p>
+                                <div class="name-section">
+                                    <h5 style="color: #007bff;">
+                                        <%= data.firstname %>
+                                            <%= data.secondname %>
+                                    </h5>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: -1rem;" class="address-section">
+                                <p class="address-line">
+                                    <%= data.housename %>, <%= data.city %>
+                                </p>
+                                <p class="address-line">
+                                    <%= data.state %>
+                                        <%= data.pincode %>
+                                </p>
+                            </div>
+
+                            <div class="contact-section">
+                                <p class="phone-number" style="color: red;">
+                                    <span class="text-info"> phone:</span>
+                                    <%= data.phonenumber %>
+                                </p>
+                            </div>
+
+                            <div class="address-actions">
+                                <a href="/profile/editaddress/<%=data._id%>"><button
+                                        class="btn btn-danger rounded-pill mt-2">Edit</button></a>
+
+
+                                <a href="#" onclick="showDeleteConfirm('<%=data._id%>')">
+                                    <button class="btn btn-primary rounded-pill mt-2 ms-3">Delete</button>
+                                </a>
+
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+
+
+
+
+                <% } else { %>
+                    <div style="text-align: start; padding: 20px; border-radius: 8px; margin-top: 10px;">
+                        <p style="font-size: 40px; color: #00ff2f; font-weight: bold;">Please add your address:</p>
+                       
+                    </div>
+                    <% } %>
+
+
+
+                        <div id="custom-popup" class="custom-popup">
+                            <h2>Are you sure you want to Logout?</h2>
+                            <div class="popup-buttons">
+                                <button id="delete-button" class="btn btn-danger">Yes</button>
+                                <button id="cancel-button" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- delect address -->
+
+    <script>
+        function showDeleteConfirm(addressId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // If user clicks OK in the SweetAlert dialog, redirect to the delete URL
+                    window.location.href = "/profile/addressDelete/" + addressId;
+                } else {
+                    // If user clicks Cancel in the SweetAlert dialog, do nothing
+                    // You can add additional handling or simply leave this empty
+                }
+            });
+        }
+    </script>
+
+
+
+    <script>
+        function confirmDelete() {
+            var popup = document.getElementById('custom-popup');
+            popup.style.display = 'block';
+
+            document.getElementById('delete-button').addEventListener('click', function () {
+                window.location.href = '/logoutuser'
+            });
+
+            document.getElementById('cancel-button').addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+        }
+    </script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

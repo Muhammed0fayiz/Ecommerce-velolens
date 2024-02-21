@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            align-items: center;
+            height: 95vh;
+            margin: 0;
+            background-color: lavenderblush;
+        }
+       
+        .otp-container {
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 100px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            height: 60vh;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+
+        }
+
+        .logo img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+
+        .otp-heading {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            margin-top: 3vh;
+        }
+
+        .otp-form {
+            margin-top: 20px;
+        }
+
+        .otp-input {
+            text-align: center;
+            font-size: 18px;
+            letter-spacing: 15px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .otp-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        .otp-submit {
+            width: 100%;
+            font-size: 18px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .otp-submit:hover {
+            background-color: #0056b3;
+        }
+      
+        #gradient-custom-4 {
+            /* fallback for old browsers */
+            background: #84fab0;
+
+            /* Chrome 10-25, Safari 5.1-6 */
+            background: -webkit-linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
+
+            /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            background: linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
+        }
+
+       
+    </style>
+</head>
+
+<body class="gradient-custom-4">
+    <div class="container">
+        <div class="otp-container" id="gradient-custom-4">
+            <div class="logo ">
+                <img src="/img/logo4.png" alt="Logo">
+            </div>
+            <h2 class="otp-heading mt-3">Enter OTP</h2>
+            <form class="otp-form mt-3" action="/usersignup/otpPost" method="post" id="verifyMobileOTP">
+                <div class="form-group">
+                    <input type="text" class="form-control otp-input" placeholder="Enter OTP" maxlength="6" required
+                        name="otp">
+                </div>
+                <button type="submit" class="btn btn-primary otp-submit" id="verifyBtn">Verify OTP</button>
+
+                <div id="messageContainer" style=" margin-top: 10px;
+             
+               
+                border: 1px solid #c3e6cb;
+                border-radius: 4px;
+                color: rgb(225, 19, 19);
+                font-size: 14px;
+                text-align: center;
+                display:none;"></div>
+                        <!-- Add this div for displaying the error message -->
+                        <!-- <div id="error-message" style="color: red; text-align: center; margin-top: 10px;"></div>    -->
+
+                        <p id="timer" style="display:none;color: red;margin-left: 15vh;">Time left: <span
+                                id="countdown">60</span> seconds</p>
+
+                        <a href="/resendotp"> <button type="button" class="btn btn-link" id="resendBtn"
+                                style="display:none;">Resend OTP</button></a>
+            </form>
+
+
+
+        </div>
+    </div>
+    <script>
+        document.getElementById('verifyMobileOTP').addEventListener('submit', async function (event) {
+          event.preventDefault();
+      
+          // Use FormData to serialize the form data
+          const formData = new FormData(document.querySelector('.otp-form'));
+      
+          try {
+            const response = await fetch('/usersignup/otpPost', {
+              method: 'POST',
+              body: new URLSearchParams(formData), // Manually set content type to application/x-www-form-urlencoded
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            });
+      
+            const result = await response.json();
+      
+            // Display the message
+            const messageContainer = document.getElementById('messageContainer');
+            messageContainer.style.display = 'block';
+            if (result.success) {
+              // Redirect to the specified URL
+              window.location.href = result.redirect;
+            } else {
+              messageContainer.innerHTML = `<p>${result.message}</p>`;
+            }
+          } catch (error) {
+            console.error('Error:', error);
+          }
+        });
+        </script>
+    <script>
+        // JavaScript code to handle the timer and show the resend button
+        document.addEventListener("DOMContentLoaded", function () {
+            var countdown = 60; // Set the initial countdown value in seconds
+
+            // Function to start the timer
+            function startTimer() {
+                document.getElementById('timer').style.display = 'block';
+                var timer = setInterval(function () {
+                    countdown--;
+                    document.getElementById('countdown').textContent = countdown;
+
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        document.getElementById('timer').style.display = 'none';
+                        document.getElementById('resendBtn').style.display = 'block';
+                    }
+                }, 1000);
+            }
+
+
+            // Start the timer when the form is submitted
+            startTimer();
+
+            // Event listener for resend button click
+            document.getElementById('resendBtn').addEventListener('click', function () {
+                // You may want to add logic here to resend the OTP
+                countdown = 60; // Reset the countdown value
+                document.getElementById('countdown').textContent = countdown;
+                startTimer(); // Start the timer again
+                document.getElementById('resendBtn').style.display = 'none'; // Hide the resend button
+
+                // Clear the error message when resending
+                document.getElementById('error-message').textContent = '';
+            });
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
