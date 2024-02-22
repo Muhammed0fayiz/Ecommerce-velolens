@@ -35,7 +35,8 @@ router.get('/updateprofile', CheckSessionAndBlocked, Profilecontroller.UpdatePro
 //update profile post
 router.post('/updateprofilePost', upload, Profilecontroller.UpdateProfilePost)
 //change password
-router.get('/chagepassword', CheckSessionAndBlocked, Profilecontroller.ChagePassword)
+
+router.get('/changepassword', CheckSessionAndBlocked, Profilecontroller.ChagePassword)
 //change password post
 router.post('/changepasswordpost', Profilecontroller.ChangePasswordPost)
 

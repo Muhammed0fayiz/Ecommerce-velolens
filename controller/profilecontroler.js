@@ -140,7 +140,7 @@ const UpdateProfilePost = async (req, res) => {
 
 //change password get
 const ChagePassword = (req, res) => {
-
+  console.log('hello')
   res.render('user/changepassword')
 }
 
