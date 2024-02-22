@@ -188,7 +188,7 @@
                         <input id="coupencode" name="coupencode" type="text" class="form-control" placeholder="Enter the code">
                         <button id="coupenbtn" type="button" class="btn btn-info" onclick="applyCoupon(`<%= totalSum%>`)">Apply Now</button>
                     </div>
-                    <div id="messageContainer"></div>
+                    <div id="messageContainer" style="color: red;"></div>
                     <h5 class="text-danger">Discount: ₹ <span id="discountValue">0.00</span></h5>
                     <h5>Total Price: <span id="total-price2">
                         <%= totalSum%>
@@ -279,7 +279,7 @@
                         body: JSON.stringify({ coupencode }),
                     });
                     if (!response.ok) {
-                        messageContainer.textContent = `already use a coupen`;
+                        messageContainer.textContent = `Invalid entry`;
                         setTimeout(() => {
                             messageContainer.textContent = ""
                         }, 2000);
