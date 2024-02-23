@@ -279,7 +279,7 @@ const excelReport = async (req, res) => {
     ]);
     console.log(orderCursor);
     if (orderCursor.length === 0) {
-      return res.redirect("/admindashboard");
+      return res.redirect("/admin/dashboard");
     }
 
     const workbook = new ExcelJS.Workbook();
@@ -351,6 +351,7 @@ orderdate: { $gte: startingDate, $lte: endingDate },
 
     // Create a PDF document
    // Assuming addresscollection is an array
+  
    let addressDetails
    for(let address of orders){
     addressDetails = await addresscollection.findById(address.address);
