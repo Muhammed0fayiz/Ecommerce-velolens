@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/headstyle.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <!-- Include SweetAlert library from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Header and Profile Styles */
+        header,
+        .profile-container {
+            max-width: 800px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                padding: 10px;
+            }
+
+            .profile-picture {
+                width: 100px;
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .profile-info {
+                text-align: left;
+                margin-bottom: 30px;
+            }
+        }
+
+        /* Button Styles */
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Sidebar Styles */
+        #sidebar {
+            height: 100%;
+            width: 10rem;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            padding-top: 20px;
+        }
+
+        #sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        #sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        #main {
+            margin-left: 250px;
+            padding: 16px;
+        }
+
+        /* Animation and Popup Styles */
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .btn-animate {
+            position: relative;
+        }
+
+        .btn-animate .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+
+        .custom-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .custom-popup h2 {
+            margin-top: 0;
+        }
+
+        .popup-buttons {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .popup-buttons button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        /* Address Details Styles */
+        .address-details {
+            max-width: 400px;
+            margin-left: -1rem;
+            margin-top: 1rem;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-section {
+            margin-bottom: 20px;
+        }
+
+        .name-section {
+            font-size: 1.2em;
+            margin-top: 5px;
+        }
+
+        .address-section {
+            margin-bottom: 15px;
+        }
+
+        .address-line {
+            margin: 5px 0;
+        }
+
+        .contact-section {
+            font-weight: bold;
+        }
+        tbody tr {
+    margin-bottom: 10px;
+    text-align: center;
+}
+table th{
+    text-align: center;
+}
+
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2">
+                <%-include('usernavbar')%>
+            </div>
+
+            <div class="col-md-10">
+                <div class="mb-4">
+                    <h1 style="color:#ef0202;margin-top: 1rem;margin-bottom: 1rem;" onmouseover="this.style.color='rgb(255, 0, 255)'"
+                    onmouseout="this.style.color='#ef0202'">
+                   
+                </h1>
+                </div>
+
+                <div >
+                
+                        <!-- TABLE HEADER -->
+                        <table style="width:100%">
+
+                            <thead>
+                                <tr>
+                                    <th style="background-color: aqua;color:blue;">
+                                        Index</th>
+                                  <th style="background-color: aqua;color:blue;">Id</th>
+                                  <th style="background-color: aqua;color:blue;">Amout</th>
+                                  <th style="background-color: aqua;color:blue;">Action</th>
+                                  <th style="background-color: aqua;color:blue;">Order Date</th>
+                                  <th style="background-color: aqua;color:blue;">Status</th>
+                                 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                                        <tr>
+                                            <td style="  display: flex;
+           
+            justify-content: center;">1
+                                             
+                                            </td>
+                                            <td>
+                                              2
+                                            </td>
+                                            <td>3
+                                              
+                                            </td>
+                                            <td>4
+                                              
+
+                                            </td>
+                                            <td>5
+                                                
+                                            </td>
+                                            <td>
+                                               6
+                                            </td>
+                                         
+                                        </tr>
+                                       
+                            </tbody>
+                        </table>
+
+                        <% function formatDate(inputDate) { %>
+                            <% const date=new Date(inputDate); %>
+                                <% const day=String(date.getDate()).padStart(2, '0' ); %>
+                                    <% const month=String(date.getMonth() + 1).padStart(2, '0' ); %>
+                                        <% const year=String(date.getFullYear()).slice(-2); %>
+                                            <%= `${day}-${month}-${year}` %>
+                                                <% } %>
+
+                                                  
+                                                    
+                                                       
+                </div>
+
+                <div id="custom-popup" class="custom-popup">
+                    <h2>Are you sure you want to Logout?</h2>
+                    <div class="popup-buttons">
+                        <button id="delete-button" class="btn btn-danger">Yes</button>
+                        <button id="cancel-button" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete() {
+            var popup = document.getElementById('custom-popup');
+            popup.style.display = 'block';
+
+            document.getElementById('delete-button').addEventListener('click', function () {
+                window.location.href = '/logoutuser'
+            });
+
+            document.getElementById('cancel-button').addEventListener('click', function () {
+                popup.style.display = 'none';
+            });
+        }
+    </script>
+
+    <!-- DATATABLE SCRIPT -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.13.8/datatables.min.js"></script>
+    <script>
+        new DataTable('#example');
+    </script>
+</body>
+
+</html>

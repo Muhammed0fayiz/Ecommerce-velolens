@@ -53,6 +53,9 @@ router.post('/editaddresspost/:id', Profilecontroller.EditAddressPost)
 //delete address 
 router.get('/addressDelete/:id', CheckSessionAndBlocked, Profilecontroller.DeleteAddress)
 
+
+//order wallethistory
+router.get('/wallethistory',CheckSessionAndBlocked, Profilecontroller.WalletHistory)
 //order show
 router.get('/showorders', CheckSessionAndBlocked, Profilecontroller.UserOrders)
 

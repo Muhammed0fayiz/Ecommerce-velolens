@@ -24,6 +24,21 @@ const loginschema = new mongoose.Schema({
         type: Boolean,
         default:false
     },
+    Wallethistory: [
+        {
+            amount: {
+                type: Number
+            },
+            Date: {
+                    type:Date,
+            },
+            Status:{
+                type:String,
+            },
+        
+           
+        }
+    ],
 });
 
 const users = mongoose.model('signups', loginschema);

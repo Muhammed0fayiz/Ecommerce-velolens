@@ -140,39 +140,33 @@ const OrderStatusPost = async (req, res) => {
     const newstatus = req.body.status;
 
     try {
+        const order = await ordercollection.findOneAndUpdate(
+            { userid, 'productcollection._id': productid },
+            { $set: { 'productcollection.$.status': newstatus } },
+            { new: true }
+        );
 
-        if (newstatus === 'cancelled') {
-            const order = await ordercollection.findOneAndUpdate(
-                { userid, 'productcollection._id': productid },
-                { $set: { 'productcollection.$.status': newstatus } },
-                { new: true }
-            );
+        if (!order) {
+            return res.status(404).send("Order not found");
+        }
 
-            if (!order) {
-                return res.status(404).send("Order not found");
-            }
+        // Check if payment mode is 'WalletPayment' or 'OnlinePayment'
+        if (order.paymentmode === 'WalletPayment' || order.paymentmode === 'OnlinePayment') {
+            const product = order.productcollection.find(product => product._id.toString() === productid);
+            const amountToAdd = product.price * product.quantity;
 
-            // If payment mode is 'OnlinePayment' or 'WalletPayment', increase user's wallet amount
-            if (order.paymentmode === 'WalletPayment' || order.paymentmode === 'OnlinePayment') {
-                const product = order.productcollection.find(product => product._id.toString() === productid);
-                const amountToAdd = product.price * product.quantity;
+            // Find user and update wallet amount
+            const user = await usercollection.findById(userid);
+            user.wallet += amountToAdd;
+            
+            // Push the transaction to wallet history
+            user.Wallethistory.push({
+                amount: amountToAdd,
+                Date: new Date(),
+                Status: "Debited"
+            });
 
-                // Find user and update wallet amount
-                const user = await usercollection.findById(userid);
-                user.wallet += amountToAdd;
-                await user.save();
-            }
-        } else {
-            // Old code for other statuses
-            const order = await ordercollection.findOneAndUpdate(
-                { userid, 'productcollection._id': productid },
-                { $set: { 'productcollection.$.status': newstatus } },
-                { new: true }
-            );
-
-            if (!order) {
-                return res.status(404).send("Order not found");
-            }
+            await user.save();
         }
 
         return res.redirect('/admin/orderpage');

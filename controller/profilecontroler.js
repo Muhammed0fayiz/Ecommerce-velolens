@@ -140,7 +140,7 @@ const UpdateProfilePost = async (req, res) => {
 
 //change password get
 const ChagePassword = (req, res) => {
-  console.log('hello')
+
   res.render('user/changepassword')
 }
 
@@ -333,6 +333,10 @@ const OrderViewMore = async (req, res) => {
   }
 };
 
+//wallet history
+const WalletHistory=(req,res)=>{
+  res.render('user/wallethistory')
+}
 
 //invoice downloads
 const Invoice = async (req, res) => {
@@ -481,7 +485,8 @@ module.exports = {
   OrderCancel,
   OrderReturn,
   OrderViewMore,
-  Invoice
+  Invoice,
+  WalletHistory
 
 }
 

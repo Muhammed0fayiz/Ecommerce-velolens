@@ -211,10 +211,10 @@
               <%}%>
               <h4><%=user.username%></h4>
               <p><%=user.email%></p>
-
+               
             <p><i class="fas fa-wallet"> </i> Wallet:<i class="fas fa-rupee-sign"></i> <span style="font-size: 1.2rem;color: red;"><%=user.wallet.toFixed(2)%></span></p>
               <section class="section mb-4">
-                <h4>Change Profile</h4>
+                <a style="text-decoration: none;" href="/profile/wallethistory"><h5>Wallet History</h5></a>
                 <a href="/profile/updateprofile"><button class="btn btn-primary btn-block">Update Profile</button></a>
               </section>
             
@@ -225,7 +225,7 @@
                 <a href="/profile/changepassword"><button class="btn btn-primary btn-block">Change Password</button></a>
               </section>
             </div>
-
+                       
 
             <!-- Logout Popup -->
             <div id="custom-popup" class="custom-popup">
