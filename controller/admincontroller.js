@@ -214,11 +214,6 @@ const BlockUser = async (req, res) => {
 }
 
 
-
-
-
-
-
 //sales report
 
 const SalesReport = async (req, res) => {

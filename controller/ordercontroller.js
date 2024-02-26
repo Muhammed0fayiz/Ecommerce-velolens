@@ -52,7 +52,7 @@ const ConfirmOrderPost = async (req, res) => {
         if (payment === 'WalletPayment') {
             if (user.wallet >= totalAmount) {
                 user.wallet -= totalAmount;
-                
+
                 // Push transaction to wallet history
                 user.Wallethistory.push({
                     amount: -totalAmount,
@@ -142,8 +142,6 @@ const Orderpage = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
-
-//order status change admin
 const OrderStatusPost = async (req, res) => {
     const productid = req.params.id;
     const userid = req.params.userid;
@@ -160,32 +158,30 @@ const OrderStatusPost = async (req, res) => {
             return res.status(404).send("Order not found");
         }
 
-        // Check if payment mode is 'WalletPayment' or 'OnlinePayment'
-        if (order.paymentmode === 'WalletPayment' || order.paymentmode === 'OnlinePayment') {
-            const product = order.productcollection.find(product => product._id.toString() === productid);
-            const amountToAdd = (product.price * product.quantity)-order.
-            invdiscount;
-           
-            // Find user and update wallet amount
-            const user = await usercollection.findById(userid);
-            user.wallet += amountToAdd;
-            
-            // Push the transaction to wallet history
-            user.Wallethistory.push({
-                amount: amountToAdd,
-                Date: new Date(),
-                Status: "Debited"
-            });
-
-            await user.save();
+        if (newstatus === 'cancelled') { // Only update wallet for cancelled orders
+            // Check if payment mode is 'WalletPayment' or 'OnlinePayment'
+            if (order.paymentmode === 'WalletPayment' || order.paymentmode === 'OnlinePayment') {
+                const product = order.productcollection.find(product => product._id.toString() === productid);
+                const amountToAdd = (product.price * product.quantity) - order.invdiscount;
+                // Find user and update wallet amount
+                const user = await usercollection.findById(userid);
+                user.wallet += amountToAdd;
+                // Push the transaction to wallet history
+                user.Wallethistory.push({
+                    amount: amountToAdd,
+                    Date: new Date(),
+                    Status: "Debited"
+                });
+                await user.save();
+            }
         }
-
         return res.redirect('/admin/orderpage');
     } catch (error) {
         console.error(error);
         return res.status(500).send("Internal Server Error");
     }
 };
+
 
 //order filter data admin
 const OrderFilter = async (req, res) => {
