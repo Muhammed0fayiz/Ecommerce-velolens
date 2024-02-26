@@ -153,8 +153,9 @@ const OrderStatusPost = async (req, res) => {
         // Check if payment mode is 'WalletPayment' or 'OnlinePayment'
         if (order.paymentmode === 'WalletPayment' || order.paymentmode === 'OnlinePayment') {
             const product = order.productcollection.find(product => product._id.toString() === productid);
-            const amountToAdd = product.price * product.quantity;
-
+            const amountToAdd = (product.price * product.quantity)-order.
+            invdiscount;
+           
             // Find user and update wallet amount
             const user = await usercollection.findById(userid);
             user.wallet += amountToAdd;

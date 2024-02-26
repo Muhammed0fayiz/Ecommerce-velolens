@@ -178,13 +178,12 @@ const UserOrders = async (req, res) => {
 
 //user order cancel
 const OrderCancel = async (req, res) => {
-
-
   try {
     const userId = req.session.user;
     const productid = req.params.id;
     const orderid = req.params.orderid;
     const newstatus = "cancelled";
+
     const order = await ordercollection.findOneAndUpdate(
       { userid: userId, 'productcollection.productid': productid, _id: orderid },
       { $set: { 'productcollection.$.status': newstatus } },
@@ -206,12 +205,16 @@ const OrderCancel = async (req, res) => {
 
       if (orders.paymentmode === 'WalletPayment' || orders.paymentmode === 'OnlinePayment') {
         const data = {
-          amount: (product.price * product.quantity)-order.
-          invdiscount
+          amount: (product.price * product.quantity) - order.invdiscount
         };
 
         const user = await usercollection.findById(userId);
         user.wallet += data.amount;
+        user.Wallethistory.push({
+          amount: data.amount,
+          Date: new Date(),
+          Status: "Refund for cancelled order"
+        });
         await user.save();
       }
     } else {
@@ -231,21 +234,19 @@ const OrderCancel = async (req, res) => {
   }
 };
 
-// return order
 const OrderReturn = async (req, res) => {
-
-
   try {
     const userId = req.session.user;
     const productid = req.params.id;
     const orderid = req.params.orderid;
-  
     const newstatus = "Returned";
+
     const order = await ordercollection.findOneAndUpdate(
       { userid: userId, 'productcollection.productid': productid, _id: orderid },
       { $set: { 'productcollection.$.status': newstatus } },
       { new: true }
     );
+
     const orders = await ordercollection.findOne({ userid: userId, _id: orderid });
 
     if (orders) {
@@ -255,14 +256,8 @@ const OrderReturn = async (req, res) => {
         return res.status(404).send('Returned product not found in order');
       }
 
-       // Calculate the discount amount
-    const discountAmount = order.
-    invdiscount || 0;
-
-    
-  
-         // Calculate the refund amount for the returned product
-         const refundAmount = returnedItem.price * returnedItem.quantity-discountAmount;
+      // Calculate the refund amount for the returned product
+      const refundAmount = returnedItem.price * returnedItem.quantity - (order.invdiscount || 0);
 
       // Update user's wallet with the refund amount
       await usercollection.findOneAndUpdate(
@@ -275,6 +270,15 @@ const OrderReturn = async (req, res) => {
         { _id: productid },
         { $inc: { Stock: +returnedItem.quantity } } // Increasing stock by the returned quantity
       );
+
+      // Push the transaction to wallet history
+      const user = await usercollection.findById(userId);
+      user.Wallethistory.push({
+        amount: refundAmount,
+        Date: new Date(),
+        Status: "Refund for returned order"
+      });
+      await user.save();
     } else {
       console.log('Order not found');
       return res.status(404).send('Order not found');
@@ -291,7 +295,6 @@ const OrderReturn = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 };
-
 
 
 //user order productdetails view
