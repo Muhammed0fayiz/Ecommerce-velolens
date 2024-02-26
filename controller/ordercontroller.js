@@ -11,7 +11,6 @@ const couponcollection = require('../models/coupon')
 
 
 
-// confirm page post chekout
 const ConfirmOrderPost = async (req, res) => {
     try {
         const applycoupon = req.body.coupencode;
@@ -53,6 +52,13 @@ const ConfirmOrderPost = async (req, res) => {
         if (payment === 'WalletPayment') {
             if (user.wallet >= totalAmount) {
                 user.wallet -= totalAmount;
+                
+                // Push transaction to wallet history
+                user.Wallethistory.push({
+                    amount: -totalAmount,
+                    Date: new Date(),
+                    Status: "Payment for order"
+                });
             } else {
                 return res.status(400).send('Insufficient funds in wallet');
             }
@@ -79,8 +85,8 @@ const ConfirmOrderPost = async (req, res) => {
             invdiscount: invdiscount // Include individual discount in order
         };
 
-        // Update user's wallet amount
-        await usercollection.findByIdAndUpdate({ _id: userId }, { wallet: user.wallet });
+        // Update user's wallet amount and transaction history
+        await usercollection.findByIdAndUpdate({ _id: userId }, { wallet: user.wallet, $push: { Wallethistory: user.Wallethistory } });
 
         await ordercollection.insertMany([order]);
         await cartcollection.deleteMany({ userid: userId });
@@ -91,6 +97,10 @@ const ConfirmOrderPost = async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 };
+
+module.exports = ConfirmOrderPost;
+
+
 
 
 // conform page render
