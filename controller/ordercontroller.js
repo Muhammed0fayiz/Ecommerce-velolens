@@ -5,6 +5,7 @@ const productcollection = require('../models/product')
 const categorycollection = require('../models/category')
 const ordercollection = require('../models/order')
 const addresscollection = require('../models/address')
+const wallethistorycollection=require('../models/wallethistory')
 const cartcollection = require('../models/cart');
 const couponcollection = require('../models/coupon')
 
@@ -53,12 +54,17 @@ const ConfirmOrderPost = async (req, res) => {
             if (user.wallet >= totalAmount) {
                 user.wallet -= totalAmount;
 
-                // Push transaction to wallet history
-                user.Wallethistory.push({
-                    amount: -totalAmount,
-                    Date: new Date(),
-                    Status: "Payment for order"
-                });
+                const walletOrder ={
+                    userid:req.session.user,
+                    date: new Date(),
+                    amount:totalAmount,
+                    creditordebit: "Debited",
+                        };
+                  await wallethistorycollection.insertMany([walletOrder])
+                  
+  
+
+
             } else {
                 return res.status(400).send('Insufficient funds in wallet');
             }
@@ -85,8 +91,8 @@ const ConfirmOrderPost = async (req, res) => {
             invdiscount: invdiscount // Include individual discount in order
         };
 
-        // Update user's wallet amount and transaction history
-        await usercollection.findByIdAndUpdate({ _id: userId }, { wallet: user.wallet, $push: { Wallethistory: user.Wallethistory } });
+        // Update user's wallet amount
+        await usercollection.findByIdAndUpdate({ _id: userId }, { wallet: user.wallet });
 
         await ordercollection.insertMany([order]);
         await cartcollection.deleteMany({ userid: userId });
@@ -98,7 +104,8 @@ const ConfirmOrderPost = async (req, res) => {
     }
 };
 
-module.exports = ConfirmOrderPost;
+
+
 
 
 
@@ -167,12 +174,19 @@ const OrderStatusPost = async (req, res) => {
                 const user = await usercollection.findById(userid);
                 user.wallet += amountToAdd;
                 // Push the transaction to wallet history
-                user.Wallethistory.push({
-                    amount: amountToAdd,
-                    Date: new Date(),
-                    Status: "Debited"
-                });
+              
                 await user.save();
+                
+                const users = await usercollection.findById(userid);
+                const walletOrder ={
+                  userid:users._id,
+                  date: new Date(),
+                  amount:amountToAdd,
+                  creditordebit: "Credited",
+                      };
+                await wallethistorycollection.insertMany([walletOrder])
+                
+
             }
         }
         return res.redirect('/admin/orderpage');

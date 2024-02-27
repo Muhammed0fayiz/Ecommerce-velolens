@@ -3,6 +3,7 @@ const router = express.Router();
 const usercollection = require('../models/users')
 const productcollection = require('../models/product')
 const categorycollection = require('../models/category')
+const wallethistorycollection=require('../models/wallethistory')
 const addresscollection = require('../models/address')
 const ordercollection = require('../models/order');
 const PDFDocument = require('pdfkit');
@@ -15,6 +16,19 @@ const UserProfile = async (req, res) => {
     const user = await usercollection.findById(userid)
     console.log(user)
     res.render('user/userprofile', { user })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const WalletHistory=async (req,res)=>{
+  try {
+
+    const id=req.session.user
+    const user = await usercollection.findById(id)
+    const wallethistory=await wallethistorycollection.find({
+      userid:id})
+      res.render('user/wallethistory',{wallethistory,user})
   } catch (error) {
     console.log(error)
   }
@@ -183,7 +197,6 @@ const OrderCancel = async (req, res) => {
     const productid = req.params.id;
     const orderid = req.params.orderid;
     const newstatus = "cancelled";
-
     const order = await ordercollection.findOneAndUpdate(
       { userid: userId, 'productcollection.productid': productid, _id: orderid },
       { $set: { 'productcollection.$.status': newstatus } },
@@ -210,12 +223,18 @@ const OrderCancel = async (req, res) => {
 
         const user = await usercollection.findById(userId);
         user.wallet += data.amount;
-        user.Wallethistory.push({
-          amount: data.amount,
-          Date: new Date(),
-          Status: "Refund for cancelled order"
-        });
+        
         await user.save();
+   
+// Save the wallet transaction
+const walletOrder ={
+  userid:req.session.user,
+  date: new Date(),
+  amount:data.amount,
+  creditordebit: "Credited",
+      };
+await wallethistorycollection.insertMany([walletOrder])
+
       }
     } else {
       console.log("Order not found");
@@ -265,6 +284,14 @@ const OrderReturn = async (req, res) => {
         { $inc: { wallet: refundAmount } }
       );
 
+      const walletOrder ={
+        userid:req.session.user,
+        date: new Date(),
+        amount:refundAmount,
+        creditordebit: "Credited",
+            };
+      await wallethistorycollection.insertMany([walletOrder])
+
       // Update the stock of the returned product
       await productcollection.updateOne(
         { _id: productid },
@@ -273,11 +300,7 @@ const OrderReturn = async (req, res) => {
 
       // Push the transaction to wallet history
       const user = await usercollection.findById(userId);
-      user.Wallethistory.push({
-        amount: refundAmount,
-        Date: new Date(),
-        Status: "Refund for returned order"
-      });
+      
       await user.save();
     } else {
       console.log('Order not found');
@@ -336,10 +359,7 @@ const OrderViewMore = async (req, res) => {
   }
 };
 
-//wallet history
-const WalletHistory=(req,res)=>{
-  res.render('user/wallethistory')
-}
+
 
 //invoice downloads
 const Invoice = async (req, res) => {
@@ -484,12 +504,12 @@ module.exports = {
   UpdateProfilePost,
   ChagePassword,
   ChangePasswordPost,
+  WalletHistory,
   UserOrders,
   OrderCancel,
   OrderReturn,
   OrderViewMore,
   Invoice,
-  WalletHistory
 
 }
 

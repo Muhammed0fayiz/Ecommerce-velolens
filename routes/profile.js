@@ -9,7 +9,8 @@ const Admincontroller = require('../controller/admincontroller')
 const Productcontroller = require('../controller/productcontroller')
 const Categorycontroller = require('../controller/categorycontroller')
 const Profilecontroller = require('../controller/profilecontroler')
-const CheckSessionAndBlocked = require('../middleware/usermiddleware')
+const CheckSessionAndBlocked = require('../middleware/usermiddleware');
+const { profileEnd } = require('console');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }))
 
@@ -35,11 +36,11 @@ router.get('/updateprofile', CheckSessionAndBlocked, Profilecontroller.UpdatePro
 //update profile post
 router.post('/updateprofilePost', upload, Profilecontroller.UpdateProfilePost)
 //change password
-
 router.get('/changepassword', CheckSessionAndBlocked, Profilecontroller.ChagePassword)
 //change password post
 router.post('/changepasswordpost', Profilecontroller.ChangePasswordPost)
-
+//wallet history
+router.get('/wallethistory',Profilecontroller.WalletHistory)
 //user address get
 router.get('/useraddress', CheckSessionAndBlocked, Profilecontroller.UserAddress)
 //add address get
@@ -54,8 +55,7 @@ router.post('/editaddresspost/:id', Profilecontroller.EditAddressPost)
 router.get('/addressDelete/:id', CheckSessionAndBlocked, Profilecontroller.DeleteAddress)
 
 
-//order wallethistory
-router.get('/wallethistory',CheckSessionAndBlocked, Profilecontroller.WalletHistory)
+
 //order show
 router.get('/showorders', CheckSessionAndBlocked, Profilecontroller.UserOrders)
 

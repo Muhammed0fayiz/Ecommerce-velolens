@@ -106,6 +106,8 @@ router.post('/salesreportfilter',Admincontroller.SalesReportFilter)
 router.get('/coupon',AuthMiddleware,CheckSession, Couponcontroller.CouponPage)
 //add coupon get admin
 router.get('/addcoupon',AuthMiddleware,CheckSession, Couponcontroller.AddCoupon)
+//delete coupon
+router.get('/deletecoupon/:id',AuthMiddleware,CheckSession, Couponcontroller.DeleteCoupon)
 //add coupon post admin
 router.post('/addcouponpost', Couponcontroller.AddCouponPost)
 //excel and pdf

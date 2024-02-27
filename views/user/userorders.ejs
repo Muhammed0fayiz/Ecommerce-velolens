@@ -233,6 +233,7 @@
                                   <th style="background-color: aqua;color:blue;">Quantity</th>
                                   <th style="background-color: aqua;color:blue;">Price</th>
                                   <th style="background-color: aqua;color:blue;">Discount</th>
+                                  <th style="background-color: aqua;color:blue;">Total</th>
                                   <th style="background-color: aqua;color:blue;">Order Date</th>
                                   <th style="background-color: aqua;color:blue;">Status</th>
                                   <th style="background-color: aqua;color:blue;">Payment Mode</th>
@@ -260,6 +261,11 @@
                                                 <%= orders.invdiscount.toFixed(2) %>
 
                                             </td>
+                                            <td>
+                                                <%= (product.price * product.quantity - orders.invdiscount).toFixed(2) %>
+                                            </td>
+                                            
+                                            
                                             <td>
                                                 <%- formatDate(orders.orderdate) %>
                                             </td>

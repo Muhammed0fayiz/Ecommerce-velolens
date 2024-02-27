@@ -101,7 +101,16 @@ const coupencheck = async (req, res) => {
         });
     }
 };
+ 
+const DeleteCoupon=async(req,res)=>{
+const id=req.params.id
+const coupon=await couponcollection.findOne({couponcode:id})
+const couponId=coupon._id
+await couponcollection.findByIdAndDelete({ _id:couponId})
+res.redirect('/admin/coupon')
+   
 
+}
 
 module.exports = {
     CouponPage,
@@ -109,5 +118,6 @@ module.exports = {
     AddCouponPost,
     ShowCoupon,
     BackButton,
-    coupencheck
+    coupencheck,
+    DeleteCoupon
 }
