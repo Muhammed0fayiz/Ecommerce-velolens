@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
     <!-- Include SweetAlert library from CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <style>
@@ -198,14 +198,10 @@
         .contact-section {
             font-weight: bold;
         }
-        tbody tr {
-    margin-bottom: 10px;
-    text-align: center;
-}
-table th{
-    text-align: center;
-}
 
+        tbody tr {
+            margin-bottom: 10px;
+        }
     </style>
 
 </head>
@@ -219,71 +215,52 @@ table th{
 
             <div class="col-md-10">
                 <div class="mb-4">
-                    <h1 style="color:#ef0202;margin-top: 1rem;margin-bottom: 1rem;" onmouseover="this.style.color='rgb(255, 0, 255)'"
-                    onmouseout="this.style.color='#ef0202'">
-                   
-                </h1>
+                    <h1 style="color:#ef0202;margin-top: 1rem;margin-bottom: 1rem;"
+                        onmouseover="this.style.color='rgb(255, 0, 255)'" onmouseout="this.style.color='#ef0202'">
+                        Wallet History 
+                    </h1>
+                   <p >balance: <span style="color: #f7b707;">₹<%=user.
+                    wallet.toFixed(2)%></span></p>
                 </div>
 
-                <div >
-                
+                <div>
+                    <% if (wallethistory.length > 0) { %>
                         <!-- TABLE HEADER -->
                         <table style="width:100%">
-
                             <thead>
                                 <tr>
-                                    <th style="background-color: aqua;color:blue;">
-                                        Index</th>
-                                  <th style="background-color: aqua;color:blue;">Id</th>
-                                  <th style="background-color: aqua;color:blue;">Amout</th>
-                                  <th style="background-color: aqua;color:blue;">Action</th>
-                                  <th style="background-color: aqua;color:blue;">Order Date</th>
-                                  <th style="background-color: aqua;color:blue;">Status</th>
-                                 
+                                    <th style="background-color: aqua;color:blue; text-align: center;">No</th>
+                                    <th style="background-color: aqua;color:blue; text-align: center;">Amount</th>
+                                    <th style="background-color: aqua;color:blue; text-align: center;">Date</th>
+                                    <th style="background-color: aqua;color:blue; text-align: center;">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                
-                                        <tr>
-                                            <td style="  display: flex;
-           
-            justify-content: center;">1
-                                             
-                                            </td>
-                                            <td>
-                                              2
-                                            </td>
-                                            <td>3
-                                              
-                                            </td>
-                                            <td>4
-                                              
-
-                                            </td>
-                                            <td>5
-                                                
-                                            </td>
-                                            <td>
-                                               6
-                                            </td>
-                                         
-                                        </tr>
-                                       
+                                <% wallethistory.forEach((data, index) => { %>
+                                    <tr>
+                                        <td style="text-align: center;"><%= index + 1 %></td>
+                                        <td style="text-align: center;"><%= data.amount %></td>
+                                        <td style="text-align: center;"><%- formatDate(data.date) %></td>
+                                        <td style="text-align: center;"><%= data.creditordebit %></td>
+                                    </tr>
+                                <% }) %>
                             </tbody>
                         </table>
-
-                        <% function formatDate(inputDate) { %>
-                            <% const date=new Date(inputDate); %>
-                                <% const day=String(date.getDate()).padStart(2, '0' ); %>
-                                    <% const month=String(date.getMonth() + 1).padStart(2, '0' ); %>
-                                        <% const year=String(date.getFullYear()).slice(-2); %>
-                                            <%= `${day}-${month}-${year}` %>
-                                                <% } %>
-
-                                                  
-                                                    
-                                                       
+                    <% } else { %>
+                        <div style="text-align: center; padding: 20px; background-color: #a4fcd0; border-radius: 8px; margin-top: 10px;">
+                            <p style="font-size: 18px; color: #4400ff; font-weight: bold;">No Wallet history available.</p>
+                        </div>
+                    <% } %>
                 </div>
+                
+                <% function formatDate(inputDate) { %>
+                    <% const date = new Date(inputDate); %>
+                    <% const day = String(date.getDate()).padStart(2, '0'); %>
+                    <% const month = String(date.getMonth() + 1).padStart(2, '0'); %>
+                    <% const year = String(date.getFullYear()).slice(-2); %>
+                    <%= `${day}-${month}-${year}` %>
+                <% } %>
+                
 
                 <div id="custom-popup" class="custom-popup">
                     <h2>Are you sure you want to Logout?</h2>

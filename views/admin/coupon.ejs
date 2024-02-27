@@ -103,6 +103,7 @@
                <th style="background-color: aqua;color:blue;">Amount</th>
                <th style="background-color: aqua;color:blue;">Discount</th>
                <th style="background-color: aqua;color:blue;">Expire Date</th>
+               <th style="background-color: aqua;color:blue;">Delete</th>
 
             </tr>
           </thead>
@@ -124,6 +125,11 @@
                        
                         <%- formatDate(coupon.expiredate) %>
                       </td>
+                      <td>
+                        <a href="#" onclick="confirmDelete('<%= coupon.couponcode %>')">
+                          <button style="background-color: #dc3545; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 3px;">Delete</button>
+                        </a>
+                    </td>
                     </tr>
                   <% }); %>
                 <% } %>
@@ -162,33 +168,35 @@
 
     </script>
     <script>
-        function showConfirmation() {
-            Swal.fire({
-                title: 'Logout Confirmation',
-                text: 'Are you sure you want to log out?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, Logout',
-                cancelButtonText: 'Cancel',
-                customClass: {
-                    title: 'swal-title',
-                    text: 'swal-text',
-                    confirmButton: 'swal-button--confirm',
-                    cancelButton: 'swal-button--cancel'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    performLogout();
-                }
-            });
-        }
-
-        function performLogout() {
-            // Add your logout logic here
-            // For example, redirect to the logout URL
-            window.location.href = "/admin/logout";
-        }
-    </script>
+      function confirmDelete(couponCode) {
+          var confirmation = confirm("Are you sure you want to delete coupon " + couponCode + "?");
+          if (confirmation) {
+              // If user confirms, redirect to delete endpoint
+              window.location.href = "/admin/deletecoupon/" + couponCode;
+          } else {
+              // If user cancels, do nothing
+              return false;
+          }
+      }
+  </script>
+    <script>
+      function confirmDelete(couponCode) {
+          Swal.fire({
+              title: 'Are you sure?',
+              text: "You won't be able to revert this!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Yes, delete '
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // If user confirms, redirect to delete endpoint
+                  window.location.href = "/admin/deletecoupon/" + couponCode;
+              }
+          });
+      }
+  </script>
     <!-- Add Bootstrap JS and Popper.js scripts at the end of the body -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
