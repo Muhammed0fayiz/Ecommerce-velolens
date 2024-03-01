@@ -331,7 +331,10 @@
                 }
             }
 
-            let orderId;
+           
+            document.getElementById('rzp-button1').onclick = function (e) {
+
+                let orderId;
             let price = document.getElementById('price')
             let orderprice = price.getAttribute('data-totalprice')
             $(document).ready(function () {
@@ -357,7 +360,9 @@
                 });
             });
             console.log("price is", orderprice);
-            document.getElementById('rzp-button1').onclick = function (e) {
+
+
+
                 var options = {
                     "key": "rzp_test_BLFOsAviK4G3wC",
                     "amount":  (overallTotalPrice || orderprice) * 100,

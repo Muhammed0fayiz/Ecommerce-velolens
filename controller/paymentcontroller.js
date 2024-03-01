@@ -5,7 +5,8 @@ const cartcollection = require('../models/cart')
 const ordercollection = require('../models/order')
 
 // console.log(instance);
-const OrderPayment = async (req, res) => {
+const 
+OrderPayment = async (req, res) => {
   try {
     console.log('here bck');
     const { amount } = req.body;
