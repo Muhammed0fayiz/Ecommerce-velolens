@@ -39,7 +39,7 @@ const CartPage = async (req, res) => {
     const sum = await calculateTotalSum(userId);
     console.log("sum:", sum);
 
-    res.render('user/usercart', { cart, sum });
+    res.render('user/usercart', { cart, sum});
 
   } catch (error) {
     console.log(error)
@@ -49,7 +49,7 @@ const CartPage = async (req, res) => {
 
 
 // add to cart
-const AddTOCart = async (req, res) => {
+const  AddTOCart = async (req, res) => {
   try {
     const productId = req.params.id;
     const userId = req.session.user;
@@ -104,7 +104,7 @@ const UpdateQuantity = async (req, res) => {
   try {
     const productid = req.params.id;
     const action = req.query.action;
-
+  
     const cartItem = await cartcollection.findOne({ _id: productid });
 
     if (!cartItem) {
@@ -113,6 +113,7 @@ const UpdateQuantity = async (req, res) => {
 
     // Fetch the corresponding product to get the stock
     const product = await productcollection.findById(cartItem.productid);
+   
 
     if (!product) {
       return res.status(404).json({ message: 'Product not found' });
@@ -121,7 +122,7 @@ const UpdateQuantity = async (req, res) => {
     if (action === 'increase') {
       // Check if increasing quantity exceeds the stock
       if (cartItem.quantity + 1 > product.Stock) {
-        return res.status(400).json({ message: 'Quantity exceeds available stock' });
+        return res.status(400).json({ message: 'out of stock' });
       }
 
       // Increase cart quantity
