@@ -67,7 +67,7 @@ let otp
 let signupdata
 //  signup post
 const SignupPost = async (req, res) => {
-  try {
+  try {console.log('fayiz')
 
     const existingUser = await usercollection.findOne({ email: req.body.email });
 

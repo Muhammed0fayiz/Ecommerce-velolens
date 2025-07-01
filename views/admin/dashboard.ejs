@@ -213,28 +213,28 @@
           const startingDate = document.getElementById('startingDate').value;
           const endingDate = document.getElementById('endingDate').value;
       
-          // Check if both start date and end date are selected
+   
           if (!startingDate || !endingDate) {
             alert("Please select both start and end dates.");
             return;
           }
       
-          // Convert date strings to Date objects
+      
           const startDateObj = new Date(startingDate);
           const endDateObj = new Date(endingDate);
       
-          // Check if start date is after end date
+
           if (startDateObj > endDateObj) {
             alert("End date must be after start date.");
             return;
           }
       
-          // Proceed to generate report
+      
           if (reportType === 'pdf') {
-            // Redirect to the PDF generation route with query parameters
+         
             window.location.href = `/admin/salesgeneratepdf?startingdate=${startingDate}&endingdate=${endingDate}`;
           } else if (reportType === 'excel') {
-            // Redirect to the Excel generation route with query parameters
+            
             window.location.href = `/admin/excelReport?startingdate=${startingDate}&endingdate=${endingDate}`;
           }
         }
