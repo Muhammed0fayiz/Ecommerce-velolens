@@ -106,46 +106,49 @@
 
 
 
-  <script>
+<script>
+  const NewCategory = async (event) => {
+    event.preventDefault();
 
-    const NewCategory = async (event) => {
-      event.preventDefault(); // Prevent default form submission behavior
+    const brandName = document.getElementById('inputField').value.trim();
+    const messageContainer = document.getElementById('errorMessage');
 
-      try {
-        const brandName = document.getElementById('inputField').value;
+    try {
+      const response = await fetch('/admin/addcategory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ brandname: brandName }),
+      });
 
-        const response = await fetch('/admin/addcategory', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ brandname: brandName }),
-        });
+      const result = await response.json();
 
-        const result = await response.json();
+      // Set color and show message
+      messageContainer.innerHTML = `<p style="color: ${result.success ? 'green' : 'red'};">${result.message}</p>`;
+      messageContainer.style.display = 'block';
 
-        // Display the message
-        const messageContainer = document.getElementById('errorMessage');
-        messageContainer.innerHTML = `<p>${result.message}</p>`;
+      // Clear message after 2 seconds
+      setTimeout(() => {
+        messageContainer.innerHTML = '';
+      }, 2000);
 
-        // Show the message container
-        messageContainer.style.display = 'block';
+      // Redirect only if success
+      if (result.success) {
         setTimeout(() => {
-          messageContainer.innerHTML = '';
-        }, 2000);
-
-        if (result.success) {
-          // Redirect to the specified URL if login is successful
           window.location.href = '/admin/category';
-        }
-      } catch (error) {
-        console.error('Error:', error);
+        }, 2000); // Wait a bit before redirect
       }
+
+    } catch (error) {
+      messageContainer.innerHTML = `<p style="color: red;">Something went wrong</p>`;
+      console.error('Error:', error);
     }
+  };
 
-    document.getElementById('categoryForm').addEventListener('submit', NewCategory);
+  document.getElementById('categoryForm').addEventListener('submit', NewCategory);
+</script>
 
-  </script>
 
 
 

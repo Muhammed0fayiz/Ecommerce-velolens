@@ -19,37 +19,32 @@ const AddCategory = (req, res) => {
 }
 // addcategory post
 const NewCategory = async (req, res) => {
-    try {
-        // Check if brandname is empty
-        if (req.body.brandname.trim() === "") {
-            // Brand name is empty, send a response to the client
-            return res.status(400).json({ success: false, message: 'Brand name must be filled' });
-        }
+  try {
+    const brandname = req.body.brandname.trim();
 
-        // Check if the category already exists
-        const existingCategory = await categorycollection.findOne({
-            category: { $regex: new RegExp(req.body.brandname, 'i') },
-        });
-
-        if (existingCategory) {
-            // Brand name already exists, send a response to the client
-            return res.status(400).json({ success: false, message: 'Category already exists' });
-        }
-
-        // If brandname is not empty and the category doesn't exist, proceed with insertion
-        const data = {
-            category: req.body.brandname,
-        };
-
-        await categorycollection.insertMany([data]);
-
-        console.log('Category inserted successfully');
-        return res.status(200).json({ success: true, message: 'Insert successful' });
-    } catch (error) {
-        console.log('Error while post:', error);
-        return res.status(500).json({ success: false, message: 'Internal server error' });
+    if (brandname === "") {
+      return res.status(400).json({ success: false, message: 'Brand name must be filled' });
     }
+
+    // Exact, case-insensitive match
+    const existingCategory = await categorycollection.findOne({
+      category: { $regex: new RegExp(`^${brandname}$`, 'i') }
+    });
+
+    if (existingCategory) {
+      return res.status(400).json({ success: false, message: 'Category already exists' });
+    }
+
+    await categorycollection.insertMany([{ category: brandname }]);
+
+    console.log('Category inserted successfully');
+    return res.status(200).json({ success: true, message: 'Insert successful' });
+  } catch (error) {
+    console.log('Error while post:', error);
+    return res.status(500).json({ success: false, message: 'Internal server error' });
+  }
 };
+
 
 
 
@@ -70,42 +65,45 @@ const UpdateCategory = async (req, res) => {
 // category update post
 const UpdateCategoryPost = async (req, res) => {
     try {
-        if (req.body.brandname.trim() === "") {
-            // Brand name is empty, send a response to the client
+        const brandname = req.body.brandname.trim();
+
+
+        if (brandname === "") {
             return res.status(400).json({ success: false, message: 'Brand name must be filled' });
         }
 
-        // Check if the category already exists
+   
         const existingCategory = await categorycollection.findOne({
-            category: { $regex: new RegExp(req.body.brandname, 'i') },
+            category: { $regex: new RegExp(`^${brandname}$`, 'i') }
         });
 
-        if (existingCategory) {
-            // Brand name already exists, send a response to the client
+
+        if (existingCategory && existingCategory._id.toString() !== req.params.id) {
             return res.status(400).json({ success: false, message: 'Category already exists' });
         }
 
         const id = req.params.id;
 
-
-
+  
         await categorycollection.findByIdAndUpdate(id, {
-            category: req.body.brandname
+            category: brandname
         });
-        await productcollection.fid
 
+       
+        await productcollection.updateMany(
+            { category: { $regex: new RegExp(`^${brandname}$`, 'i') } },
+            { $set: { category: brandname } }
+        );
 
-
-        console.log('Category inserted successfully');
-        return res.status(200).json({ success: true, message: 'Insert successful' });
-
-        // res.redirect('/admin/category')
+        console.log('Category updated successfully');
+        return res.status(200).json({ success: true, message: 'Update successful' });
 
     } catch (error) {
-        console.log('Error while post:', error);
+        console.log('Error while updating category:', error);
         return res.status(500).json({ success: false, message: 'Internal server error' });
     }
 };
+
 // delete category
 const DeleteCategory = async (req, res) => {
     try {

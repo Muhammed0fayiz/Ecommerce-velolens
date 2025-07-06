@@ -86,7 +86,7 @@
           <form id="categoryForm" ">
           <!-- <form action=" /admin/updateCategorypost/<%=updCategory._id%>" method="post"> -->
             <label for="inputField">Brand Name</label>
-            <input type="text" id="inputField" name="brandname" placeholder="<%=updCategory.category%>">
+            <input type="text" id="inputField" name="brandname" value="<%=updCategory.category%>">
 
             <% if (typeof errorMessage !=='undefined' ) { %>
               <div id="alertMessage" class="alert alert-danger text-center">
@@ -122,7 +122,7 @@
 
         // Display the message
         const messageContainer = document.getElementById('errorMessage');
-        messageContainer.innerHTML = `<p>${result.message}</p>`;
+        messageContainer.innerHTML = `<p style="color: ${result.success ? 'green' : 'red'};">${result.message}</p>`;
 
         // Show the message container
         messageContainer.style.display = 'block';
