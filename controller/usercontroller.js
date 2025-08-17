@@ -5,9 +5,8 @@ const productcollection = require('../models/product')
 const categorycollection = require('../models/category')
 const crypto = require('crypto')
 const nodemailer = require('nodemailer');
-
-
-
+const wishlistcollection=require('../models/wishlist')
+const cartcollection = require('../models/cart');
 
 // guestpage render
 const UserGuest = (req, res) => {
@@ -229,6 +228,10 @@ const ProductView = async (req, res) => {
 
 const ShopPage = async (req, res) => {
   try {
+      const userId = req.session.user;
+  const wishlist = await wishlistcollection.find({ userid: userId });
+ const cart = await cartcollection.find({ userid: userId });
+     console.log('hello',userId);
     const page = parseInt(req.query.page) || 1;
     const limit = 6; // Set the number of products per page
     const skip = (page - 1) * limit;
@@ -237,7 +240,7 @@ const ShopPage = async (req, res) => {
     const category = await categorycollection.find();
     const totalPages = Math.ceil(totalProducts / limit);
     const currentPage = Math.min(page, totalPages);
-    res.render('user/usershop', { product, category, totalPages, currentPage });
+    res.render('user/usershop', { product, category, totalPages, currentPage,wishlist,cart});
   } catch (error) {
     console.log(error);
     return res.status(500).send("Internal Server Error");

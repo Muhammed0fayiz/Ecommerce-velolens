@@ -235,6 +235,12 @@
       margin-left: 3.5rem;
       padding: 0 1.5rem;
     }
+.text-red {
+  color: red;
+}
+.text-black {
+  color: black;
+}
 
 
     /*-- FOOTER --*/
@@ -427,14 +433,44 @@
                   </div>
                   <div class="card__precis">
                 
-                    <a href="/wishlist/addtowishlist/<%= product._id%>" class="card__icon"><ion-icon style="color:black;"  name="heart-outline"></ion-icon></a>
                  
+      
+
+<%
+  const isInWishlist = wishlist.some(item => item.productid.toString() === product._id.toString());
+  const iconColor = isInWishlist ? 'red' : 'black';
+%>
+<a href="/wishlist/addtowishlist/<%= product._id %>" class="card__icon" data-product-id="<%= product._id %>">
+<ion-icon 
+  name="<%= isInWishlist ? 'heart' : 'heart-outline' %>" 
+  class="<%= isInWishlist ? 'text-red' : 'text-black' %>">
+</ion-icon>
+
+
+</a>
+
+
                     
                     <div>
 
                       <span class="card__preci card__preci--now">₹<%= product.Price%></span>
                     </div>
-                    <a href="/cart/addtocart/<%=product._id%>" class="card__icon"><ion-icon name="cart-outline"></ion-icon></a>
+
+             
+                   <a href="/cart/addtocart/<%= product._id %>" class="card__icon">
+  <% 
+  
+    let inCart = cart.some(item => item.productid.toString() === product._id.toString());
+  %>
+
+  <% if (inCart) { %>
+    <ion-icon name="cart"></ion-icon> 
+  <% } else { %>
+    <ion-icon name="cart-outline"></ion-icon> 
+  <% } %>
+</a>
+
+                    
                   </div>
                   <a href="/productView/<%=product._id%>" class="btn btn-primary w-75 mt-3" id='viewmore'>viewmore</a>
                 </article>
@@ -550,6 +586,13 @@
 
               </a>
             </div>
+<% cart.forEach((item) => { %>
+  <div>
+    <h2><%= item._id%></h2>
+    <p>Price: <%= item.price %></p>
+    <p>Quantity: <%= item.quantity %></p>
+  </div>
+<% }); %>
 
           </footer>
 

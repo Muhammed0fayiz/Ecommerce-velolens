@@ -86,6 +86,8 @@ const  AddTOCart = async (req, res) => {
 const DeleteCartItem = async (req, res) => {
   try {
     const id = req.params.id
+    console.log('del',id);
+    
     await cartcollection.findByIdAndDelete({ _id: id })
       .then(() => {
         res.redirect('/cart/cartpage')
